@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BenOS — Agentic Operating System v1.1</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #161b27;
+  --surface2: #1a2035;
+  --border: #1e293b;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-dim: #4a5568;
+  --blue: #4a9eff;
+  --blue-dark: #1e5799;
+  --teal: #48bb78;
+  --teal-dark: #1e7a5a;
+  --amber: #d4a847;
+  --amber-dark: #5a5a1e;
+  --purple: #c084fc;
+  --purple-dark: #7a1e7a;
+  --orange: #fb923c;
+  --orange-dark: #7a3a1e;
+  --green: #86efac;
+  --green-dark: #3a7a1e;
+  --gray: #9ca3af;
+  /* v1.1 new colors */
+  --coo-border: #bf8c00;
+  --coo-bg: #1c1600;
+  --coo-text: #f0c030;
+  --sc-border: #4a9e4a;
+  --sc-bg: #0a190a;
+  --sc-text: #6fcf6f;
+  --jan-border: #2a7a7a;
+  --jan-bg: #0a1a1a;
+  --jan-text: #4dc9c9;
+  --urgent: #ff4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: auto;
+}
+
+.page {
+  padding: 28px 24px 48px;
+  min-width: 1920px;
+}
+
+/* ── Title ── */
+.title-block { text-align: center; margin-bottom: 32px; }
+.title-block h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
+.title-block h1 span { color: var(--blue); font-weight: 400; }
+.title-block p { font-size: 11px; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; margin-top: 6px; }
+.title-block .version-badge {
+  display: inline-block; margin-top: 8px; padding: 3px 12px;
+  border-radius: 20px; font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  background: rgba(191,140,0,0.1); border: 1px solid rgba(191,140,0,0.3); color: #f0c030;
+}
+
+/* ── Layout chrome ── */
+.row { display: flex; align-items: flex-start; margin-bottom: 0; position: relative; }
+
+.layer-label {
+  width: 130px; min-width: 130px; padding-right: 14px; padding-top: 14px;
+  text-align: right; flex-shrink: 0;
+}
+.layer-label .lnum { display: block; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #2d3748; margin-bottom: 2px; }
+.layer-label .lname { display: block; font-size: 11px; font-weight: 700; color: #475569; line-height: 1.3; }
+
+.row-content { flex: 1; display: flex; gap: 9px; align-items: stretch; }
+.row-content.centered { justify-content: center; }
+
+/* ── System Intelligence Layer band ── */
+.sil-band {
+  flex: 1;
+  border: 1px solid rgba(74,158,255,0.12);
+  border-radius: 14px;
+  background: rgba(74,158,255,0.02);
+  padding: 10px;
+  position: relative;
+}
+.sil-label {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #2d4a6a;
+  background: var(--bg);
+  padding: 0 10px;
+  white-space: nowrap;
+}
+.sil-inner { display: flex; gap: 9px; align-items: stretch; }
+
+/* ── Connector rows ── */
+.connector {
+  margin-left: 130px; padding: 5px 0;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  font-size: 9.5px; color: var(--text-dim); letter-spacing: 0.5px; position: relative;
+}
+.connector .flow-tag {
+  padding: 2px 8px; border-radius: 10px; border: 1px solid #1e293b;
+  background: #0d1117; white-space: nowrap;
+}
+.connector .flow-read { color: #4a9eff; border-color: #1a3050; }
+.connector .flow-write { color: #c084fc; border-color: #3a1a5a; }
+.connector .arrow { font-size: 14px; color: #2d3748; }
+
+.divider {
+  margin-left: 130px; height: 1px;
+  background: linear-gradient(to right, transparent, #1e293b 15%, #1e293b 85%, transparent);
+}
+
+/* ── Nodes ── */
+.node {
+  border: 1.5px solid #2d3748; border-radius: 10px; padding: 13px 14px;
+  background: var(--surface); position: relative; cursor: default;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.node:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10; }
+.node-name { font-size: 12.5px; font-weight: 700; margin-bottom: 5px; line-height: 1.2; display: flex; align-items: center; gap: 5px; }
+.node-desc { font-size: 9.5px; color: var(--text-muted); line-height: 1.6; }
+
+.tag {
+  display: inline-block; font-size: 8.5px; padding: 1.5px 5px; border-radius: 3px;
+  margin: 2px 2px 0 0; background: rgba(255,255,255,0.05); color: #94a3b8;
+  border: 1px solid #2d3748; white-space: nowrap;
+}
+
+/* ── Layer-specific node styles ── */
+.n-operator { border-color: var(--blue); background: #0c1f38; box-shadow: 0 0 24px rgba(74,158,255,0.12); }
+.n-operator .node-name { color: var(--blue); }
+
+.n-ea { border-color: var(--blue); background: #0c1f38; box-shadow: 0 0 16px rgba(74,158,255,0.08); }
+.n-ea .node-name { color: var(--blue); }
+
+/* v1.1 System Intelligence nodes */
+.n-coo { border-color: var(--coo-border); background: var(--coo-bg); }
+.n-coo .node-name { color: var(--coo-text); }
+.n-coo:hover { box-shadow: 0 10px 30px rgba(191,140,0,0.2); }
+
+.n-sc { border-color: var(--sc-border); background: var(--sc-bg); }
+.n-sc .node-name { color: var(--sc-text); }
+.n-sc:hover { box-shadow: 0 10px 30px rgba(74,158,74,0.2); }
+
+.n-jan { border-color: var(--jan-border); background: var(--jan-bg); }
+.n-jan .node-name { color: var(--jan-text); }
+.n-jan:hover { box-shadow: 0 10px 30px rgba(42,122,122,0.2); }
+
+.n-ba { border-color: var(--blue-dark); background: #0c1827; }
+.n-ba .node-name { color: #63b3ed; }
+.n-ba-health { border-color: #2d5a90; border-style: dashed; background: #0c1827; }
+.n-ba-health .node-name { color: #63b3ed; }
+.n-ba-cat { border-color: #2d7ab8; background: #0c1e35; box-shadow: 0 0 12px rgba(45,122,184,0.12); }
+.n-ba-cat .node-name { color: #63b3ed; }
+
+.n-am { border-color: var(--teal-dark); background: #0c1e17; }
+.n-am .node-name { color: var(--teal); }
+.n-am-new { border-color: var(--teal-dark); border-style: dashed; background: #0c1e17; }
+.n-am-new .node-name { color: var(--teal); }
+
+.n-skill { border-color: var(--amber-dark); background: #18170c; flex: 1; }
+.n-skill .node-name { color: var(--amber); font-size: 12px; }
+
+.n-craft { border-color: var(--purple-dark); background: #1a0c2a; box-shadow: 0 0 28px rgba(122,30,122,0.18); }
+.n-craft .node-name { color: var(--purple); }
+.n-linear { border-color: var(--orange-dark); background: #1f100c; }
+.n-linear .node-name { color: var(--orange); }
+.n-gdrive { border-color: var(--green-dark); background: #0c1f0c; }
+.n-gdrive .node-name { color: var(--green); }
+.n-mcp { border-color: #2d3748; background: #10131c; }
+.n-mcp .node-name { color: var(--gray); font-size: 11px; }
+
+/* ── Tags ── */
+.mcp-tag {
+  display: inline-block; font-size: 8px; padding: 1.5px 5px; border-radius: 3px;
+  background: rgba(30,40,60,0.8); color: #64748b; border: 1px solid #252f42;
+  margin: 2px 2px 0 0; white-space: nowrap; font-family: 'Consolas','SF Mono',monospace;
+}
+.craft-badge {
+  display: inline-block; font-size: 8px; padding: 1.5px 5px; border-radius: 3px;
+  background: rgba(122,30,122,0.15); color: #c084fc; border: 1px solid rgba(122,30,122,0.35);
+  margin: 2px 2px 0 0; white-space: nowrap; font-family: 'Consolas','SF Mono',monospace;
+}
+.folder-tag {
+  display: inline-block; font-size: 7.5px; padding: 1px 5px; border-radius: 2px;
+  background: rgba(122,30,122,0.1); color: #8b5ca0; border: 1px solid rgba(122,30,122,0.2);
+  margin: 1.5px 2px 0 0; white-space: nowrap; font-family: 'Consolas','SF Mono',monospace;
+}
+
+/* ── Skill pills ── */
+.skill-list { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 7px; }
+.skill-pill {
+  font-size: 8px; padding: 2px 5px; border-radius: 3px;
+  background: rgba(212,168,71,0.08); color: #a88a3d;
+  border: 1px solid rgba(212,168,71,0.18); white-space: nowrap;
+  font-family: 'Consolas','SF Mono',monospace; transition: background 0.1s;
+}
+.skill-pill:hover { background: rgba(212,168,71,0.16); color: var(--amber); }
+
+/* ── AM layer wrapper ── */
+.am-wrapper { display: flex; align-items: flex-start; gap: 9px; flex: 1; }
+.am-spacer-left { flex: 2.15; }
+.am-spacer-right { flex: 3.85; }
+.am-col { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.am-header {
+  font-size: 8.5px; color: var(--teal); text-transform: uppercase; letter-spacing: 1px;
+  text-align: center; padding: 3px 0;
+  border-top: 1px solid rgba(30,122,90,0.4); border-bottom: 1px solid rgba(30,122,90,0.4);
+}
+
+/* ── Storage layer ── */
+.storage-hint { font-size: 8.5px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+
+/* ── Idea Lifecycle Strip ── */
+.lifecycle-section {
+  margin-left: 130px; margin-top: 10px; margin-bottom: 2px;
+  background: #0d1017; border: 1px solid #1a2030; border-radius: 10px; padding: 12px 16px;
+}
+.lifecycle-title {
+  font-size: 8.5px; text-transform: uppercase; letter-spacing: 2px; color: #2d4060;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.lifecycle-flow { display: flex; flex-direction: column; gap: 6px; }
+.lc-row { display: flex; align-items: center; gap: 0; flex-wrap: nowrap; }
+.lc-state {
+  padding: 3px 9px; border-radius: 4px; font-size: 8px; font-weight: 700;
+  letter-spacing: 0.5px; white-space: nowrap; border: 1px solid;
+}
+.lc-fresh   { background: rgba(74,158,255,0.12); color: #4a9eff; border-color: rgba(74,158,255,0.3); }
+.lc-triaged { background: rgba(212,168,71,0.12); color: #d4a847; border-color: rgba(212,168,71,0.3); }
+.lc-executed{ background: rgba(72,187,120,0.12); color: #48bb78; border-color: rgba(72,187,120,0.3); }
+.lc-parked  { background: rgba(251,146,60,0.12); color: #fb923c; border-color: rgba(251,146,60,0.3); }
+.lc-archived{ background: rgba(156,163,175,0.1); color: #6b7280; border-color: rgba(156,163,175,0.25); }
+.lc-examples{ background: rgba(192,132,252,0.12); color: #c084fc; border-color: rgba(192,132,252,0.3); }
+.lc-arr { font-size: 9px; color: #2d3748; margin: 0 4px; white-space: nowrap; flex-shrink: 0; }
+.lc-label { font-size: 8px; color: #3a4a5a; white-space: nowrap; margin: 0 3px; }
+.lc-indent { margin-left: 12px; }
+
+/* ── Data flow label strip ── */
+.flow-strip {
+  margin-left: 130px; padding: 6px 0;
+  display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 9px;
+}
+.flow-pill { padding: 2px 10px; border-radius: 10px; font-size: 8.5px; letter-spacing: 0.3px; }
+.fp-read  { background: rgba(74,158,255,0.08); color: #4a9eff; border: 1px solid rgba(74,158,255,0.2); }
+.fp-write { background: rgba(192,132,252,0.08); color: #c084fc; border: 1px solid rgba(192,132,252,0.2); }
+.fp-sync  { background: rgba(251,146,60,0.08); color: #fb923c; border: 1px solid rgba(251,146,60,0.2); }
+.fp-sep   { color: #2d3748; font-size: 12px; }
+
+/* ── SVG overlay ── */
+#arrows-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.diagram-wrap { position: relative; }
+
+/* ── Legend ── */
+.bottom-section { display: flex; gap: 16px; margin-top: 20px; margin-left: 130px; align-items: flex-start; flex-wrap: wrap; }
+.legend { flex: 1.4; min-width: 400px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
+.legend-title { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 12px; }
+.legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 10px; color: var(--text-muted); }
+.legend-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+.legend-swatch.dashed { border-style: dashed !important; }
+
+/* ── Scaling callout ── */
+.scaling { flex: 1.2; min-width: 360px; background: #0c1424; border: 1px solid #1e3a5f; border-radius: 10px; padding: 16px 20px; }
+.scaling-title { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #2d5a90; margin-bottom: 11px; display: flex; align-items: center; gap: 6px; }
+.scaling-rule { font-size: 9.5px; color: var(--text-muted); padding: 5px 0 5px 16px; position: relative; border-bottom: 1px solid #111d2e; line-height: 1.5; }
+.scaling-rule:last-child { border-bottom: none; }
+.scaling-rule::before { content: '→'; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+.scaling-rule em { font-style: normal; color: var(--text-dim); font-size: 8.5px; }
+.scaling-rule.rule-v11::before { color: var(--coo-text); }
+
+/* ── COO Governance callout ── */
+.governance { flex: 1; min-width: 300px; background: #160f00; border: 1px solid rgba(191,140,0,0.25); border-radius: 10px; padding: 16px 20px; }
+.governance-title { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: rgba(191,140,0,0.6); margin-bottom: 11px; display: flex; align-items: center; gap: 6px; }
+.gov-rule { font-size: 9.5px; color: #7a6030; padding: 5px 0 5px 14px; position: relative; border-bottom: 1px solid #1a1200; line-height: 1.5; }
+.gov-rule:last-child { border-bottom: none; }
+.gov-rule::before { content: '◆'; position: absolute; left: 0; color: rgba(191,140,0,0.5); font-size: 7px; top: 7px; }
+.gov-rule strong { color: var(--coo-text); }
+
+/* ── Footer ── */
+.footer { margin-top: 24px; margin-left: 130px; font-size: 8.5px; color: #1e293b; text-align: center; padding-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── Pulses ── */
+@keyframes craft-pulse {
+  0%, 100% { box-shadow: 0 0 28px rgba(122,30,122,0.18); }
+  50%       { box-shadow: 0 0 48px rgba(122,30,122,0.35); }
+}
+.n-craft { animation: craft-pulse 4s ease-in-out infinite; }
+
+@keyframes urgent-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1; }
+}
+.urgent-path { animation: urgent-pulse 2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<div class="page">
+<div class="diagram-wrap" id="diagram">
+
+<!-- ═══════════════════════════════════════════════════ TITLE -->
+<div class="title-block">
+  <h1>BenOS — Agentic Operating System <span>v1.1</span></h1>
+  <p>Benovative Empire &nbsp;·&nbsp; Architecture &nbsp;·&nbsp; COO + Janitor + Skill-Creator added</p>
+  <div class="version-badge">v1.1 — System Intelligence Layer</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ LAYER 1: OPERATOR -->
+<div class="row" style="margin-bottom:4px;">
+  <div class="layer-label">
+    <span class="lnum">Layer 1</span>
+    <span class="lname">Operator</span>
+  </div>
+  <div class="row-content centered">
+    <div class="node n-operator" style="min-width:320px; max-width:420px;" id="node-ben">
+      <div class="node-name">👤 Ben Bickerstaff</div>
+      <div class="node-desc">
+        Strategic direction &nbsp;·&nbsp; Goal setting &nbsp;·&nbsp; Final review &amp; approval only<br>
+        Does NOT hold direct tool credentials or interact with MCPs
+      </div>
+      <div style="margin-top:7px;">
+        <span class="tag">Sets priorities</span>
+        <span class="tag">Reviews outputs</span>
+        <span class="tag">Approves deploys</span>
+        <span class="tag" style="color:var(--coo-text); border-color:rgba(191,140,0,0.3); background:rgba(191,140,0,0.06);">Approves skill builds (COO→SC gate)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- connector 1→2 -->
+<div class="connector" style="padding:5px 0;">
+  <span class="arrow">↓</span>
+  <span class="flow-tag flow-read">strategic goals &amp; priorities</span>
+  <span class="arrow">↓</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ LAYER 2: SYSTEM INTELLIGENCE -->
+<div class="row" style="margin-bottom:4px;">
+  <div class="layer-label" style="padding-top:20px;">
+    <span class="lnum">Layer 2</span>
+    <span class="lname">System<br>Intelligence</span>
+  </div>
+  <div class="row-content">
+    <div class="sil-band">
+      <div class="sil-label">System Intelligence Layer</div>
+      <div class="sil-inner">
+
+        <!-- EA -->
+        <div class="node n-ea" style="flex:1.1;" id="node-ea">
+          <div class="node-name">🧠 Executive Assistant (EA)</div>
+          <div class="node-desc">
+            Cross-business prioritization · Trade-off visibility<br>
+            Daily agenda compilation · Goal tracking vs actuals
+          </div>
+          <div style="margin-top:7px;">
+            <span class="tag" style="color:#4a9eff; border-color:#1a3050; background:rgba(74,158,255,0.06);">No direct tool credentials</span>
+            <span class="tag" style="color:#4a9eff; border-color:#1a3050; background:rgba(74,158,255,0.06);">Reads compiled briefs only</span>
+          </div>
+          <div style="margin-top:6px; font-size:8.5px; color:var(--text-dim);">
+            <span style="color:#c084fc;">Reads:</span> BA briefs from Craft &nbsp;|&nbsp;
+            <span style="color:#c084fc;">Writes:</span> daily agenda → Craft<br>
+            <span style="color:#ff8888; font-size:8px;">⚡ Receives critical flags from Janitor (immediate)</span>
+          </div>
+        </div>
+
+        <!-- COO -->
+        <div class="node n-coo" style="flex:1.15;" id="node-coo">
+          <div class="node-name">⚙️ COO</div>
+          <div class="node-desc" style="font-size:9px;">
+            Chief Operating Officer Skill<br>
+            Skill lifecycle: intake → brief → registry<br>
+            Tool governance: registry + intake + audit<br>
+            Token &amp; usage efficiency (≥85% target)<br>
+            Saturday audit → EA Monday brief<br>
+            <span style="color:rgba(240,192,48,0.7);">Says NO by default on new tools</span>
+          </div>
+          <div style="margin-top:6px;">
+            <span class="tag" style="color:var(--coo-text); border-color:rgba(191,140,0,0.35); background:rgba(191,140,0,0.07);">Hands off to skill-creator</span>
+            <span class="tag" style="color:var(--coo-text); border-color:rgba(191,140,0,0.35); background:rgba(191,140,0,0.07);">Never builds directly</span>
+          </div>
+          <div style="margin-top:5px; font-size:8px; color:#5a4000;">
+            R/W: 90/tool-registry.md · 90/system-config.md · 90/coo-reports/ · 90/build-queue/
+          </div>
+        </div>
+
+        <!-- Skill-Creator -->
+        <div class="node n-sc" style="flex:1;" id="node-sc">
+          <div class="node-name">🔧 Skill-Creator</div>
+          <div class="node-desc" style="font-size:9px;">
+            Receives Skill Brief from COO<br>
+            Builds SKILL.md files<br>
+            Writes to skills directory<br>
+            <span style="color:rgba(111,207,111,0.7);">Ben approves between COO and SC</span>
+          </div>
+          <div style="margin-top:6px;">
+            <span class="tag" style="color:var(--sc-text); border-color:rgba(74,158,74,0.35); background:rgba(74,158,74,0.07);">Only builds — never defines</span>
+            <span class="tag" style="color:var(--sc-text); border-color:rgba(74,158,74,0.35); background:rgba(74,158,74,0.07);">COO-gated intake</span>
+          </div>
+          <div style="margin-top:5px; font-size:8px; color:#2a5a2a;">
+            Writes: skills/ directory · Craft/91 Examples
+          </div>
+        </div>
+
+        <!-- Janitor -->
+        <div class="node n-jan" style="flex:1.05;" id="node-jan">
+          <div class="node-name">🧹 Janitor</div>
+          <div class="node-desc" style="font-size:9px;">
+            Daily light run + weekly deep (Saturday, before COO)<br>
+            Four entropy domains: file · task · comms · knowledge<br>
+            Idea backlog lifecycle management<br>
+            <span style="color:rgba(77,201,201,0.7);">Never deletes unilaterally — proposes only</span>
+          </div>
+          <div style="margin-top:6px;">
+            <span class="tag" style="color:var(--jan-text); border-color:rgba(42,122,122,0.35); background:rgba(42,122,122,0.07);">⚡ Critical flags → EA (immediate)</span>
+            <span class="tag" style="color:var(--jan-text); border-color:rgba(42,122,122,0.35); background:rgba(42,122,122,0.07);">Patterns → COO Saturday</span>
+          </div>
+          <div style="margin-top:5px; font-size:8px; color:#1a4a4a;">
+            Writes: 99/janitor-logs/ · 99/janitor-reports/ · 04/triage actions
+          </div>
+        </div>
+
+      </div><!-- /sil-inner -->
+    </div><!-- /sil-band -->
+  </div>
+</div>
+
+<!-- connector 2→3 -->
+<div class="connector" style="padding:5px 0;">
+  <span class="arrow">↓</span>
+  <span class="flow-tag flow-read">EA reads briefs via Craft</span>
+  <span class="flow-tag" style="color:#94a3b8; border-color:#2d3748;">receives pings from BAs</span>
+  <span class="flow-tag" style="color:var(--coo-text); border-color:rgba(191,140,0,0.2); background:rgba(191,140,0,0.04);">COO reads tool-registry from Craft</span>
+  <span class="arrow">↓</span>
+</div>
+<div class="divider" style="margin-bottom:9px;"></div>
+
+<!-- ═══════════════════════════════════════════════════ LAYER 3: BAs -->
+<div class="row" style="margin-bottom:4px;">
+  <div class="layer-label" style="padding-top:16px;">
+    <span class="lnum">Layer 3</span>
+    <span class="lname">Business<br>Assistants</span>
+  </div>
+  <div class="row-content">
+
+    <div class="node n-ba" style="flex:1;" id="ba-sip">
+      <div class="node-name">⚡ BA-SIP</div>
+      <div class="node-desc">SIPP Mobile App<br>Content · Growth · Product · Ops</div>
+      <div style="margin-top:6px;">
+        <div class="mcp-tag">google-sip</div>
+        <div class="mcp-tag">meta-sip</div>
+        <div class="mcp-tag">linear-sip</div>
+      </div>
+      <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
+    </div>
+
+    <div class="node n-ba" style="flex:1.1;" id="ba-whos">
+      <div class="node-name">☕ BA-Who's Coffee</div>
+      <div class="node-desc">E-commerce brand<br>Content · Growth · Product · Ops</div>
+      <div style="margin-top:6px;">
+        <div class="mcp-tag">google-whos</div>
+        <div class="mcp-tag">klaviyo-whos</div>
+        <div class="mcp-tag">meta-whos</div>
+        <div class="mcp-tag">shopify-whos</div>
+      </div>
+      <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
+    </div>
+
+    <div class="node n-ba-cat" style="flex:1.15;" id="ba-cat">
+      <div class="node-name">🎯 BA-Catalyzing Concepts</div>
+      <div class="node-desc">TABA consulting<br>Client oversight · Ops · Coordinates AMs ↓</div>
+      <div style="margin-top:6px;">
+        <div class="mcp-tag">google-cat</div>
+        <div class="mcp-tag">linear-cat</div>
+      </div>
+      <div style="margin-top:5px; font-size:8px; color:#48bb78;">↓ spawns AM-[client] skills</div>
+    </div>
+
+    <div class="node n-ba" style="flex:1;" id="ba-bid">
+      <div class="node-name">🔨 BA-Bidsters</div>
+      <div class="node-desc">Bidding platform<br>Content · Growth · Product · Ops</div>
+      <div style="margin-top:6px;">
+        <div class="mcp-tag">google-bid</div>
+        <div class="mcp-tag">linear-bid</div>
+      </div>
+      <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
+    </div>
+
+    <div class="node n-ba" style="flex:1;" id="ba-club">
+      <div class="node-name">🏌️ BA-Clubhouse</div>
+      <div class="node-desc">Fantasy golf app<br>Content · Growth · Product · Ops</div>
+      <div style="margin-top:6px;">
+        <div class="mcp-tag">google-club</div>
+        <div class="mcp-tag">linear-club</div>
+      </div>
+      <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
+    </div>
+
+    <div class="node n-ba" style="flex:1.05;" id="ba-personal">
+      <div class="node-name">📢 BA-Personal Brand</div>
+      <div class="node-desc">Thought leadership<br>Content · Growth · Audience · Ops</div>
+      <div style="margin-top:6px;">
+        <div class="mcp-tag">google-personal</div>
+        <div class="mcp-tag">substack</div>
+        <div class="mcp-tag">youtube</div>
+      </div>
+      <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
+    </div>
+
+    <div class="node n-ba-health" style="flex:1;" id="ba-health">
+      <div class="node-name">🔍 BA-BenOS Health</div>
+      <div class="node-desc">Reads Craft only<br>Flags stale data · Goal drift · Conflicts</div>
+      <div style="margin-top:6px;">
+        <span class="tag" style="color:#63b3ed; border-color:#1a3a5a; background:rgba(74,158,255,0.06); font-size:7.5px;">Read-only · Craft MCP</span>
+      </div>
+      <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ pings EA on issues</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- connector 3→4 -->
+<div class="connector" style="padding:5px 0;">
+  <span class="arrow">↓</span>
+  <span class="flow-tag" style="color:#48bb78; border-color:#1e4a3a; background:rgba(30,122,90,0.06);">BA-Catalyzing only: spawns AM skills</span>
+  <span class="fp-sep">·</span>
+  <span class="flow-tag flow-write">all BAs write structured briefs → Craft → EA reads</span>
+  <span class="arrow">↓</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ LAYER 4: AMs -->
+<div class="row" style="margin-bottom:4px;">
+  <div class="layer-label" style="padding-top:14px;">
+    <span class="lnum">Layer 4</span>
+    <span class="lname">Account<br>Managers</span>
+  </div>
+  <div class="row-content">
+    <div class="am-wrapper">
+      <div class="am-spacer-left"></div>
+      <div class="am-col" id="am-col">
+        <div class="am-header">↑ Reports to BA-Catalyzing Concepts</div>
+        <div class="node n-am" id="am-a">
+          <div class="node-name">AM-Client A</div>
+          <div class="node-desc">Project state · Brand voice · Relationship log · Active tasks</div>
+          <div style="margin-top:5px;"><span class="craft-badge">BenOS/Clients/ClientA/</span></div>
+        </div>
+        <div class="node n-am" id="am-b">
+          <div class="node-name">AM-Client B</div>
+          <div class="node-desc">Project state · Brand voice · Relationship log · Active tasks</div>
+          <div style="margin-top:5px;"><span class="craft-badge">BenOS/Clients/ClientB/</span></div>
+        </div>
+        <div class="node n-am-new" id="am-n">
+          <div class="node-name">AM-Client N <span style="font-size:8.5px; color:var(--text-dim); font-weight:400;">(scalable)</span></div>
+          <div class="node-desc">Created by /client-onboard skill · One AM per active client</div>
+          <div style="margin-top:5px;"><span class="craft-badge">BenOS/Clients/[Name]/</span></div>
+        </div>
+      </div>
+      <div class="am-spacer-right"></div>
+    </div>
+  </div>
+</div>
+
+<!-- connector 4→5 -->
+<div class="connector" style="padding:5px 0;">
+  <span class="arrow">↓</span>
+  <span class="flow-tag flow-read">reads context from BenOS · all agents</span>
+  <span class="fp-sep">·</span>
+  <span class="flow-tag flow-write">writes outputs + tasks upward to Craft &amp; Linear</span>
+  <span class="arrow">↓</span>
+</div>
+<div class="divider" style="margin-bottom:9px;"></div>
+
+<!-- ═══════════════════════════════════════════════════ LAYER 5: SKILLS -->
+<div class="row" style="margin-bottom:4px;">
+  <div class="layer-label" style="padding-top:14px;">
+    <span class="lnum">Layer 5</span>
+    <span class="lname">Execution<br>Skills</span>
+  </div>
+  <div class="row-content">
+
+    <div class="node n-skill">
+      <div class="node-name">💼 SALES</div>
+      <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
+      <div class="skill-list">
+        <span class="skill-pill">/prospect-research</span>
+        <span class="skill-pill">/cold-email</span>
+        <span class="skill-pill">/follow-up</span>
+        <span class="skill-pill">/wholesale-outreach</span>
+        <span class="skill-pill">/proposal</span>
+        <span class="skill-pill">/client-onboard</span>
+        <span class="skill-pill">taba-proposal</span>
+        <span class="skill-pill">taba-phase1</span>
+      </div>
+    </div>
+
+    <div class="node n-skill">
+      <div class="node-name">📣 MARKETING</div>
+      <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
+      <div class="skill-list">
+        <span class="skill-pill">/ad-brief</span>
+        <span class="skill-pill">/ad-copy</span>
+        <span class="skill-pill">/ad-performance-review</span>
+        <span class="skill-pill">/email-campaign</span>
+        <span class="skill-pill">/email-flow</span>
+        <span class="skill-pill">/email-performance-review</span>
+        <span class="skill-pill">/landing-page</span>
+      </div>
+    </div>
+
+    <div class="node n-skill">
+      <div class="node-name">✍️ CONTENT CREATION</div>
+      <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
+      <div class="skill-list">
+        <span class="skill-pill">/capture</span>
+        <span class="skill-pill">/idea-to-campaign</span>
+        <span class="skill-pill">/content-campaign</span>
+        <span class="skill-pill">/long-form-essay</span>
+        <span class="skill-pill">/newsletter</span>
+        <span class="skill-pill">/linkedin</span>
+        <span class="skill-pill">/social-post</span>
+        <span class="skill-pill">/youtube-script</span>
+        <span class="skill-pill">/video-short</span>
+        <span class="skill-pill">/repurpose</span>
+        <span class="skill-pill">/visual-brief</span>
+      </div>
+    </div>
+
+    <div class="node n-skill">
+      <div class="node-name">⚙️ PRODUCT DEV</div>
+      <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
+      <div class="skill-list">
+        <span class="skill-pill">/feature-spec</span>
+        <span class="skill-pill">/prd</span>
+        <span class="skill-pill">/code-review</span>
+        <span class="skill-pill">/release-notes</span>
+        <span class="skill-pill">/bug-report</span>
+        <span class="skill-pill">clubhouse-workflow</span>
+        <span class="skill-pill">sipp-code-review</span>
+      </div>
+    </div>
+
+    <div class="node n-skill">
+      <div class="node-name">📋 OPS &amp; PLANNING</div>
+      <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
+      <div class="skill-list">
+        <span class="skill-pill">/morning-standup</span>
+        <span class="skill-pill">/weekly-plan</span>
+        <span class="skill-pill">/monthly-plan</span>
+        <span class="skill-pill">/quarterly-plan</span>
+        <span class="skill-pill">/backlog-review</span>
+        <span class="skill-pill">/weekly-rollup</span>
+        <span class="skill-pill">/sync-to-linear</span>
+        <span class="skill-pill">/client-monthly-report</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- connector 5→6 -->
+<div class="flow-strip">
+  <span class="flow-pill fp-read">↓ reads context from Craft</span>
+  <span class="fp-sep">·</span>
+  <span class="flow-pill fp-write">↑ writes outputs to Craft</span>
+  <span class="fp-sep">·</span>
+  <span class="flow-pill fp-sync">→ writes tasks to Linear</span>
+  <span class="fp-sep">·</span>
+  <span class="flow-pill fp-sync">/sync-to-linear bridges Craft backlog → Linear</span>
+</div>
+<div class="divider" style="margin-bottom:9px;"></div>
+
+<!-- ═══════════════════════════════════════════════════ LAYER 6: STORAGE -->
+<div class="row" style="margin-bottom:4px;">
+  <div class="layer-label" style="padding-top:14px;">
+    <span class="lnum">Layer 6</span>
+    <span class="lname">Storage</span>
+  </div>
+  <div class="row-content" style="align-items:stretch; gap:12px;">
+
+    <!-- CRAFT — expanded v1.1 -->
+    <div class="node n-craft" style="flex:2.2;" id="node-craft">
+      <div class="storage-hint" style="color:var(--purple);">◆ Primary Source of Truth</div>
+      <div class="node-name" style="font-size:15px;">📚 CRAFT / BenOS</div>
+      <div class="node-desc" style="font-size:9.5px; line-height:1.7;">
+        Knowledge · Context · Voice · Goals · Planning · Ideas · Content Pillars · Audiences · Business Profiles · Client Folders · Playbooks
+      </div>
+      <div style="margin-top:8px; display:flex; gap:16px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:8px; color:#5a3a80; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Idea Lifecycle (BenOS/04/)</div>
+          <div>
+            <span class="folder-tag">04/raw-captures</span><span style="font-size:7.5px; color:#3a2a50;"> Fresh ideas</span><br>
+            <span class="folder-tag">04/triaged-ideas</span><span style="font-size:7.5px; color:#3a2a50;"> Evaluated</span><br>
+            <span class="folder-tag">04/parking-lot</span><span style="font-size:7.5px; color:#3a2a50;"> Parked — revisit date req.</span><br>
+            <span class="folder-tag">04/idea-index</span><span style="font-size:7.5px; color:#3a2a50;"> Queryable collection</span>
+          </div>
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:8px; color:#5a3a80; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Playbooks (BenOS/90/)</div>
+          <div>
+            <span class="folder-tag">90/tool-registry.md</span><br>
+            <span class="folder-tag">90/system-config.md</span><span style="font-size:7.5px; color:#3a2a50;"> token plan + thresholds</span><br>
+            <span class="folder-tag">90/coo-reports/[date]</span><br>
+            <span class="folder-tag">90/build-queue/[skill]-brief.md</span>
+          </div>
+        </div>
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:8px; color:#5a3a80; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Archive (BenOS/99/)</div>
+          <div>
+            <span class="folder-tag">99/idea-archive/[year]/[biz]</span><br>
+            <span class="folder-tag">99/janitor-logs/[date]</span><br>
+            <span class="folder-tag">99/janitor-reports/[date]</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:7px;">
+        <span class="tag" style="color:#c084fc; border-color:rgba(122,30,122,0.4); background:rgba(122,30,122,0.1);">All agents read here</span>
+        <span class="tag" style="color:#c084fc; border-color:rgba(122,30,122,0.4); background:rgba(122,30,122,0.1);">All agents write here</span>
+        <span class="tag" style="color:#c084fc; border-color:rgba(122,30,122,0.4); background:rgba(122,30,122,0.1);">/sync-to-linear bridge</span>
+        <span class="tag" style="color:var(--coo-text); border-color:rgba(191,140,0,0.35); background:rgba(191,140,0,0.06);">COO owns tool-registry + system-config</span>
+      </div>
+    </div>
+
+    <!-- LINEAR -->
+    <div class="node n-linear" style="flex:1.3;" id="node-linear">
+      <div class="storage-hint" style="color:var(--orange);">▣ Execution Board</div>
+      <div class="node-name" style="font-size:14px;">📌 LINEAR</div>
+      <div class="node-desc" style="font-size:10px; line-height:1.7;">
+        Dev sprints · Feature backlogs<br>
+        Bug tracking · Client projects<br>
+        Release planning
+      </div>
+      <div style="margin-top:7px; font-size:9px; color:#5a3a20;">Synced from Craft via /sync-to-linear</div>
+      <div style="margin-top:7px;">
+        <span class="tag" style="color:#fb923c; border-color:rgba(122,58,30,0.4); background:rgba(122,58,30,0.1);">Dev businesses only</span>
+        <span class="tag" style="color:#fb923c; border-color:rgba(122,58,30,0.4); background:rgba(122,58,30,0.1);">One project per biz/client</span>
+      </div>
+    </div>
+
+    <!-- GOOGLE DRIVE -->
+    <div class="node n-gdrive" style="flex:1.3;" id="node-gdrive">
+      <div class="storage-hint" style="color:var(--green);">🗂 File Storage</div>
+      <div class="node-name" style="font-size:14px;">💾 GOOGLE DRIVE</div>
+      <div class="node-desc" style="font-size:10px; line-height:1.7;">
+        Large files · Brand assets<br>
+        Ad creatives · Decks<br>
+        One Drive per business
+      </div>
+      <div style="margin-top:7px; font-size:9px; color:#2a5a2a;">SIP · Who's · Catalyzing · Bidsters · Clubhouse · Personal</div>
+      <div style="margin-top:7px;">
+        <span class="tag" style="color:#86efac; border-color:rgba(58,122,30,0.4); background:rgba(58,122,30,0.1);">×6 Drive accounts</span>
+        <span class="tag" style="color:#86efac; border-color:rgba(58,122,30,0.4); background:rgba(58,122,30,0.1);">BA-authenticated access</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ IDEA LIFECYCLE STRIP -->
+<div class="lifecycle-section">
+  <div class="lifecycle-title">
+    <span>💡</span>
+    Idea Lifecycle — State Machine &nbsp;(managed by Janitor · lives in BenOS/04/ and BenOS/99/)
+  </div>
+  <div class="lifecycle-flow">
+    <!-- Row 1: Main execution path -->
+    <div class="lc-row">
+      <span class="lc-state" style="background:rgba(100,120,140,0.15); color:#64748b; border-color:rgba(100,120,140,0.25); font-size:7.5px;">/capture</span>
+      <span class="lc-arr">→</span>
+      <span class="lc-state lc-fresh">FRESH</span>
+      <span class="lc-label">7d max</span>
+      <span class="lc-arr">→</span>
+      <span class="lc-state lc-triaged">TRIAGED</span>
+      <span class="lc-arr lc-label">campaign brief written →</span>
+      <span class="lc-state lc-executed">EXECUTED</span>
+      <span class="lc-arr">→</span>
+      <span class="lc-state lc-examples">📂 Examples That Worked</span>
+      <span style="font-size:8px; color:#2d3748; margin-left:10px;">↗ success path</span>
+    </div>
+    <!-- Row 2: Parking path -->
+    <div class="lc-row lc-indent">
+      <span style="font-size:8px; color:#2d3748; margin-right:4px;">↘ no action →</span>
+      <span class="lc-state lc-triaged">TRIAGED</span>
+      <span class="lc-arr lc-label">flagged by Janitor →</span>
+      <span class="lc-state lc-parked">PARKED</span>
+      <span class="lc-label">revisit date required</span>
+      <span class="lc-arr lc-label">date passed, re-evaluate →</span>
+      <span class="lc-state lc-archived">ARCHIVED</span>
+      <span class="lc-label" style="color:#2d4060;">+ reactivation signal</span>
+      <span class="lc-arr lc-label">quarterly resurrection pass →</span>
+      <span class="lc-state" style="background:rgba(74,158,255,0.08); color:#4a9eff; border-color:rgba(74,158,255,0.2); font-size:8px;">♻ Reactivate</span>
+      <span style="font-size:8px; color:#1a2a3a; margin-left:4px;">or stays archived</span>
+    </div>
+  </div>
+</div>
+
+<!-- connector 6→7 -->
+<div class="connector" style="padding:5px 0; margin-top:6px;">
+  <span class="arrow">↓</span>
+  <span class="flow-tag" style="color:#64748b; border-color:#2d3748;">authenticated access via dedicated MCP credentials per business</span>
+  <span class="arrow">↓</span>
+</div>
+<div class="divider" style="margin-bottom:9px;"></div>
+
+<!-- ═══════════════════════════════════════════════════ LAYER 7: MCPs -->
+<div class="row" style="margin-bottom:0;">
+  <div class="layer-label" style="padding-top:14px;">
+    <span class="lnum">Layer 7</span>
+    <span class="lname">MCPs &amp;<br>Tools</span>
+  </div>
+  <div class="row-content" style="flex-wrap:wrap; gap:8px; align-items:stretch;">
+
+    <div class="node n-mcp" style="min-width:160px; flex:1.4;">
+      <div class="node-name">🔧 Google Workspace MCPs</div>
+      <div class="node-desc" style="font-size:8.5px;">×6 accounts — one per business<br>SIP · Who's · Cat · Bid · Club · Personal<br>Calendar, Docs, Gmail, Drive</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:130px; flex:1;">
+      <div class="node-name">📧 Klaviyo MCP</div>
+      <div class="node-desc" style="font-size:8.5px;">Who's Coffee · SIP<br>Email marketing automation<br>Flows, campaigns, profiles</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:130px; flex:1;">
+      <div class="node-name">📱 Meta Ads MCP</div>
+      <div class="node-desc" style="font-size:8.5px;">Who's Coffee · SIP<br>Paid social advertising<br>Ad sets, creatives, reporting</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:120px; flex:1;">
+      <div class="node-name">📌 Linear MCP</div>
+      <div class="node-desc" style="font-size:8.5px;">All dev businesses<br>Task &amp; sprint management<br>Issues, cycles, projects</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:120px; flex:1; border-color:#3a1a5a; background:rgba(122,30,122,0.06);">
+      <div class="node-name" style="color:#c084fc;">📚 Craft MCP</div>
+      <div class="node-desc" style="font-size:8.5px;">All agents (universal)<br>Primary knowledge store<br>Documents, folders, search</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:120px; flex:1;">
+      <div class="node-name">🎨 Figma MCP</div>
+      <div class="node-desc" style="font-size:8.5px;">Design assets &amp; specs<br>UI/visual work<br>Component inspection</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:120px; flex:1;">
+      <div class="node-name">🎬 Higgsfield</div>
+      <div class="node-desc" style="font-size:8.5px;">AI video generation<br>Short-form content<br>Reels, clips, ads</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:120px; flex:1;">
+      <div class="node-name">🛍 Shopify MCP</div>
+      <div class="node-desc" style="font-size:8.5px;">E-commerce platform<br>Who's Coffee store<br>Products, orders, inventory</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:110px; flex:0.9;">
+      <div class="node-name">📰 Substack</div>
+      <div class="node-desc" style="font-size:8.5px;">Newsletter publishing<br>Personal Brand only</div>
+    </div>
+
+    <div class="node n-mcp" style="min-width:110px; flex:0.9;">
+      <div class="node-name">▶️ YouTube</div>
+      <div class="node-desc" style="font-size:8.5px;">Video publishing<br>Personal Brand only</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ BOTTOM SECTION -->
+<div class="bottom-section">
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-title">Legend</div>
+    <div class="legend-grid">
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #4a9eff; background:rgba(74,158,255,0.1);"></div>
+        Operator / Executive Assistant
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #bf8c00; background:rgba(191,140,0,0.1);"></div>
+        COO (System Governance)
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #4a9e4a; background:rgba(74,158,74,0.1);"></div>
+        Skill-Creator (Build Agent)
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #2a7a7a; background:rgba(42,122,122,0.1);"></div>
+        Janitor (Entropy Manager)
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #1e5799; background:rgba(30,87,153,0.15);"></div>
+        Business Assistants (BA)
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #1e7a5a; background:rgba(30,122,90,0.15);"></div>
+        Account Managers (AM)
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #5a5a1e; background:rgba(90,90,30,0.15);"></div>
+        Execution Skills (by dept)
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #7a1e7a; background:rgba(122,30,122,0.2);"></div>
+        Craft/BenOS — Source of Truth
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #7a3a1e; background:rgba(122,58,30,0.15);"></div>
+        Linear — Execution Board
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #3a7a1e; background:rgba(58,122,30,0.15);"></div>
+        Google Drive — File Storage
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #333; background:rgba(30,30,40,0.5);"></div>
+        MCPs &amp; External Tools
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch dashed" style="border:2px dashed #1e7a5a; background:transparent;"></div>
+        Dashed border = scalable node
+      </div>
+      <div class="legend-item" style="grid-column:1/-1;">
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <span style="display:flex; align-items:center; gap:5px; font-size:9.5px;">
+            <span style="display:inline-block; width:24px; height:2px; background:rgba(255,68,68,0.9); border-radius:1px;"></span>
+            ⚡ Urgent / Critical flag path (Janitor→EA)
+          </span>
+          <span style="display:flex; align-items:center; gap:5px; font-size:9.5px;">
+            <span style="display:inline-block; width:24px; height:2px; background:rgba(191,140,0,0.7); border-radius:1px; border-top:1px dashed rgba(191,140,0,0.7);"></span>
+            Pattern report path (Janitor→COO)
+          </span>
+          <span style="display:flex; align-items:center; gap:5px; font-size:9.5px;">
+            <span style="display:inline-block; width:24px; height:2px; background:rgba(74,158,74,0.7); border-radius:1px;"></span>
+            Skill Brief handoff with Ben ✓ gate
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scaling callout -->
+  <div class="scaling">
+    <div class="scaling-title">
+      <span style="font-size:13px;">⚡</span>
+      Scaling Rules
+    </div>
+    <div class="scaling-rule">
+      <strong>New business</strong> → new BA + BenOS folder + Google Drive + MCP credentials
+      <br><em>EA and SIL are unchanged.</em>
+    </div>
+    <div class="scaling-rule">
+      <strong>New client</strong> → /client-onboard → AM skill + BenOS/Clients/[name]/ + Linear project
+      <br><em>BA-Catalyzing is unchanged.</em>
+    </div>
+    <div class="scaling-rule">
+      <strong>New skill</strong> → add to department catalog, reads BenOS context on load
+      <br><em>Agent hierarchy is unchanged.</em>
+    </div>
+    <div class="scaling-rule">
+      <strong>New platform</strong> → new MCP credential + new format skill
+      <br><em>Everything else is unchanged.</em>
+    </div>
+    <div class="scaling-rule rule-v11">
+      <strong>New skill needed</strong> → COO intake → Skill Brief → Ben approves → Skill-Creator builds → COO adds to registry
+      <br><em>Ben is approval gate. COO defines. SC builds. Never both.</em>
+    </div>
+    <div class="scaling-rule rule-v11">
+      <strong>New tool needed</strong> → COO intake → coverage check → cost/complexity score → Approve / Defer / Redirect / Reject
+      <br><em>Default answer is NO. Ben confirms any approval.</em>
+    </div>
+  </div>
+
+  <!-- COO Governance Model -->
+  <div class="governance">
+    <div class="governance-title">
+      <span>⚙️</span>
+      COO Governance Rules
+    </div>
+    <div class="gov-rule"><strong>Skills default:</strong> MAYBE — scope it first</div>
+    <div class="gov-rule"><strong>Tools default:</strong> NO — until proven necessary</div>
+    <div class="gov-rule"><strong>Efficiency target:</strong> ≥85% weekly (utilization × value rate)</div>
+    <div class="gov-rule"><strong>Janitor never deletes</strong> — proposes only, always</div>
+    <div class="gov-rule"><strong>COO defines — Skill-Creator builds</strong> — never both</div>
+    <div class="gov-rule"><strong>Ideas never deleted</strong> — archived with reactivation signal</div>
+    <div class="gov-rule"><strong>Quarterly resurrection pass</strong> on all archived ideas</div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  BenOS v1.1 &nbsp;·&nbsp; Benovative Empire &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; System Intelligence Layer: EA · COO · Skill-Creator · Janitor
+</div>
+
+</div><!-- /diagram-wrap -->
+</div><!-- /page -->
+
+<script>
+(function() {
+
+  // ── Hover interactivity ──────────────────────────────────────────────────
+  const connections = {
+    'node-ben':    ['node-ea', 'node-coo'],
+    'node-ea':     ['node-craft', 'node-ben', 'node-jan', 'node-coo'],
+    'node-coo':    ['node-ea', 'node-sc', 'node-jan', 'node-craft'],
+    'node-sc':     ['node-coo', 'node-craft'],
+    'node-jan':    ['node-ea', 'node-coo', 'node-craft'],
+    'ba-sip':      ['node-craft', 'node-ea'],
+    'ba-whos':     ['node-craft', 'node-ea'],
+    'ba-cat':      ['node-craft', 'node-ea', 'am-a', 'am-b', 'am-n'],
+    'ba-bid':      ['node-craft', 'node-ea'],
+    'ba-club':     ['node-craft', 'node-ea'],
+    'ba-personal': ['node-craft', 'node-ea'],
+    'ba-health':   ['node-craft', 'node-ea'],
+    'am-a':        ['node-craft', 'ba-cat'],
+    'am-b':        ['node-craft', 'ba-cat'],
+    'am-n':        ['node-craft', 'ba-cat'],
+    'node-craft':  ['node-ea', 'node-linear', 'node-coo'],
+    'node-linear': ['node-craft'],
+    'node-gdrive': [],
+  };
+
+  function clearHighlights() {
+    document.querySelectorAll('.node').forEach(n => { n.style.opacity = ''; n.style.outline = ''; });
+  }
+
+  Object.entries(connections).forEach(([id, related]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('mouseenter', () => {
+      document.querySelectorAll('.node').forEach(n => { n.style.opacity = '0.3'; });
+      el.style.opacity = '1';
+      el.style.outline = '2px solid rgba(74,158,255,0.5)';
+      related.forEach(rid => {
+        const rel = document.getElementById(rid);
+        if (rel) { rel.style.opacity = '1'; rel.style.outline = '2px solid rgba(192,132,252,0.4)'; }
+      });
+    });
+    el.addEventListener('mouseleave', clearHighlights);
+  });
+
+  // ── SVG arrow drawing ────────────────────────────────────────────────────
+  function getRect(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    const wrap = document.getElementById('diagram');
+    const wr = wrap.getBoundingClientRect();
+    return {
+      top:    r.top    - wr.top,
+      bottom: r.bottom - wr.top,
+      left:   r.left   - wr.left,
+      right:  r.right  - wr.left,
+      midX:   r.left   - wr.left + r.width  / 2,
+      midY:   r.top    - wr.top  + r.height / 2,
+      w: r.width, h: r.height,
+    };
+  }
+
+  function makeSVG() {
+    const wrap = document.getElementById('diagram');
+    const existing = document.getElementById('arrows-svg');
+    if (existing) existing.remove();
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.id = 'arrows-svg';
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible;';
+    wrap.style.position = 'relative';
+    wrap.appendChild(svg);
+
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+
+    function mkMarker(id, color, size) {
+      size = size || 7;
+      const m = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+      m.setAttribute('id', id);
+      m.setAttribute('markerWidth', size); m.setAttribute('markerHeight', size);
+      m.setAttribute('refX', size - 1); m.setAttribute('refY', size / 2);
+      m.setAttribute('orient', 'auto');
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      p.setAttribute('points', `0 0, ${size} ${size/2}, 0 ${size}`);
+      p.setAttribute('fill', color);
+      m.appendChild(p);
+      return m;
+    }
+
+    defs.appendChild(mkMarker('arr-blue',    'rgba(74,158,255,0.7)'));
+    defs.appendChild(mkMarker('arr-purple',  'rgba(192,132,252,0.6)'));
+    defs.appendChild(mkMarker('arr-teal',    'rgba(72,187,120,0.6)'));
+    defs.appendChild(mkMarker('arr-urgent',  'rgba(255,68,68,0.95)', 8));
+    defs.appendChild(mkMarker('arr-amber',   'rgba(191,140,0,0.8)'));
+    defs.appendChild(mkMarker('arr-green',   'rgba(74,158,74,0.8)'));
+    svg.appendChild(defs);
+
+    function line(x1,y1,x2,y2,stroke,marker,dash,width,opacity) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','line');
+      el.setAttribute('x1',x1); el.setAttribute('y1',y1);
+      el.setAttribute('x2',x2); el.setAttribute('y2',y2);
+      el.setAttribute('stroke', stroke);
+      el.setAttribute('stroke-width', width||1.5);
+      el.setAttribute('opacity', opacity||0.55);
+      if (marker) el.setAttribute('marker-end', `url(#${marker})`);
+      if (dash)   el.setAttribute('stroke-dasharray', dash);
+      svg.appendChild(el);
+      return el;
+    }
+
+    function curve(x1,y1,cx1,cy1,cx2,cy2,x2,y2,stroke,marker,dash,width,opacity,cls) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','path');
+      el.setAttribute('d', `M${x1} ${y1} C${cx1} ${cy1},${cx2} ${cy2},${x2} ${y2}`);
+      el.setAttribute('fill','none');
+      el.setAttribute('stroke',stroke);
+      el.setAttribute('stroke-width',width||1.5);
+      el.setAttribute('opacity',opacity||0.45);
+      if (marker) el.setAttribute('marker-end',`url(#${marker})`);
+      if (dash)   el.setAttribute('stroke-dasharray',dash);
+      if (cls)    el.setAttribute('class',cls);
+      svg.appendChild(el);
+      return el;
+    }
+
+    function svgText(x,y,text,color,size) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','text');
+      el.setAttribute('x',x); el.setAttribute('y',y);
+      el.setAttribute('fill',color||'#64748b');
+      el.setAttribute('font-size',size||8);
+      el.setAttribute('font-family','Segoe UI,system-ui,sans-serif');
+      el.setAttribute('text-anchor','middle');
+      el.textContent = text;
+      svg.appendChild(el);
+    }
+
+    function circle(cx,cy,r,fill,stroke) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      el.setAttribute('cx',cx); el.setAttribute('cy',cy); el.setAttribute('r',r);
+      el.setAttribute('fill',fill||'#0f1117');
+      el.setAttribute('stroke',stroke||'#4a9eff');
+      el.setAttribute('stroke-width','1.5');
+      svg.appendChild(el);
+    }
+
+    // -- collect positions --
+    const ben   = getRect('node-ben');
+    const ea    = getRect('node-ea');
+    const coo   = getRect('node-coo');
+    const sc    = getRect('node-sc');
+    const jan   = getRect('node-jan');
+    const craft = getRect('node-craft');
+    const lin   = getRect('node-linear');
+
+    if (!ben || !ea || !coo || !sc || !jan || !craft) return;
+
+    // ── Ben → EA ──
+    line(ben.midX, ben.bottom, ea.midX, ea.top-2, 'rgba(74,158,255,0.6)', 'arr-blue');
+
+    // ── EA ↔ Craft (bidirectional) ──
+    line(ea.midX - 8,  ea.bottom,   craft.midX - 8, craft.top-2, 'rgba(192,132,252,0.5)', 'arr-purple');
+    line(craft.midX+8, craft.top-2, ea.midX+8,      ea.bottom,   'rgba(74,158,255,0.35)', 'arr-blue', '4,3');
+
+    // ── COO ↔ Craft (reads tool-registry + writes coo-reports) ──
+    // Dashed purple line from COO down to Craft
+    curve(coo.midX, coo.bottom,
+          coo.midX, coo.bottom + 80,
+          craft.midX + 50, craft.top - 80,
+          craft.midX + 50, craft.top,
+          'rgba(191,140,0,0.4)', null, '4,3', 1.5, 0.5);
+
+    // ── BA nodes → Craft (write briefs) ──
+    const baIds = ['ba-sip','ba-whos','ba-cat','ba-bid','ba-club','ba-personal','ba-health'];
+    baIds.forEach(id => {
+      const ba = getRect(id);
+      if (!ba) return;
+      const cpY = (ba.bottom + craft.top) / 2;
+      curve(ba.midX, ba.bottom, ba.midX, cpY, craft.midX, cpY, craft.midX, craft.top,
+            'rgba(192,132,252,0.2)', null, '3,3');
+    });
+
+    // ── AM nodes → Craft ──
+    ['am-a','am-b','am-n'].forEach(id => {
+      const am = getRect(id);
+      if (!am) return;
+      curve(am.midX, am.bottom, am.midX, am.bottom+50, craft.midX, craft.top-50, craft.midX, craft.top,
+            'rgba(72,187,120,0.18)', null, '3,3');
+    });
+
+    // ── Craft → Linear (sync) ──
+    if (lin) line(craft.right, craft.midY, lin.left, lin.midY, 'rgba(251,146,60,0.5)', 'arr-purple');
+
+    // ═══════════════════════════════════════════
+    // ── v1.1 NEW CONNECTIONS ──
+    // ═══════════════════════════════════════════
+
+    // ── 1. JANITOR → EA (URGENCY PATH) ──
+    // Arc ABOVE the SIL band, looping from Janitor top to EA top — urgent, bright red, animated
+    {
+      const jx = jan.midX;
+      const jy = jan.top;
+      const ex = ea.midX;
+      const ey = ea.top;
+      const arcY = Math.min(jy, ey) - 55; // arc up above both nodes
+      const midX = (jx + ex) / 2;
+
+      // Glow/shadow path (thicker, more transparent)
+      curve(jx, jy, jx, arcY+10, midX, arcY-10, ex, ey,
+            'rgba(255,68,68,0.25)', null, null, 5, 0.4, 'urgent-path');
+      // Main urgent path
+      const el = curve(jx, jy, jx, arcY+10, midX, arcY-10, ex, ey,
+            'rgba(255,68,68,0.9)', 'arr-urgent', '6,3', 2.5, 0.85, 'urgent-path');
+
+      // Label
+      const lx = midX;
+      const ly = arcY - 16;
+      // Background rect for label
+      const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x', lx-72); rect.setAttribute('y', ly-8);
+      rect.setAttribute('width', 144); rect.setAttribute('height', 14);
+      rect.setAttribute('rx', 3); rect.setAttribute('fill', '#0f1117');
+      rect.setAttribute('stroke','rgba(255,68,68,0.35)'); rect.setAttribute('stroke-width','1');
+      svg.appendChild(rect);
+      svgText(lx, ly+1, '⚡ critical flags → EA (immediate)', 'rgba(255,100,100,0.9)', 7.5);
+    }
+
+    // ── 2. JANITOR → COO (pattern flags, amber dashed) ──
+    {
+      // Janitor bottom → curve to COO bottom (they're adjacent in SIL band)
+      const jx = jan.left;
+      const jy = jan.midY;
+      const cx2 = coo.right;
+      const cy2 = coo.midY;
+      curve(jx, jy,
+            jx - 30, jy,
+            cx2 + 30, cy2,
+            cx2, cy2,
+            'rgba(191,140,0,0.7)', 'arr-amber', '4,3', 1.5, 0.7);
+
+      // Label below the arc
+      const lx = (jx + cx2) / 2 - 10;
+      const ly = Math.max(jy, cy2) + 20;
+      const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x', lx-65); rect.setAttribute('y', ly-8);
+      rect.setAttribute('width', 150); rect.setAttribute('height', 13);
+      rect.setAttribute('rx', 3); rect.setAttribute('fill', '#0f1117');
+      rect.setAttribute('stroke','rgba(191,140,0,0.2)'); rect.setAttribute('stroke-width','1');
+      svg.appendChild(rect);
+      svgText(lx+10, ly, 'pattern flags → Saturday report', 'rgba(191,140,0,0.7)', 7.5);
+    }
+
+    // ── 3. COO → Skill-Creator with Ben ✓ approval gate ──
+    {
+      const cx1e = coo.right;
+      const cy1e = coo.midY;
+      const sx2e = sc.left;
+      const sy2e = sc.midY;
+      const midX = (cx1e + sx2e) / 2;
+      const midY = (cy1e + sy2e) / 2 - 10;
+
+      // Line: COO → midpoint (Ben gate)
+      line(cx1e, cy1e, midX - 12, midY, 'rgba(74,158,74,0.8)', null, null, 1.5, 0.7);
+      // Line: Ben gate → Skill-Creator
+      line(midX + 12, midY, sx2e, sy2e, 'rgba(74,158,74,0.8)', 'arr-green', null, 1.5, 0.7);
+
+      // Ben ✓ gate circle
+      circle(midX, midY, 11, '#0a190a', 'rgba(74,158,74,0.7)');
+      svgText(midX, midY+3, 'Ben ✓', 'rgba(111,207,111,0.9)', 7);
+
+      // Label below
+      const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x', midX - 72); rect.setAttribute('y', midY + 14);
+      rect.setAttribute('width', 144); rect.setAttribute('height', 13);
+      rect.setAttribute('rx', 3); rect.setAttribute('fill', '#0f1117');
+      rect.setAttribute('stroke','rgba(74,158,74,0.2)'); rect.setAttribute('stroke-width','1');
+      svg.appendChild(rect);
+      svgText(midX, midY+22, 'Skill Brief handoff (Ben approves)', 'rgba(74,158,74,0.7)', 7.5);
+    }
+
+  } // end makeSVG
+
+  window.addEventListener('load', () => { setTimeout(makeSVG, 250); setTimeout(makeSVG, 900); });
+  window.addEventListener('resize', () => setTimeout(makeSVG, 200));
+
+})();
+</script>
+
+</body>
+</html>

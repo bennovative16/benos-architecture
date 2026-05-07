@@ -291,6 +291,59 @@ body {
 /* ── Footer ── */
 .footer { margin-top: 24px; margin-left: 130px; font-size: 8.5px; color: #1e293b; text-align: center; padding-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
 
+/* ── iCloud node ── */
+.n-icloud { border-color: #1a3a5a; background: #0c1825; }
+.n-icloud .node-name { color: #5ac8fa; }
+.n-icloud:hover { box-shadow: 0 10px 30px rgba(90,200,250,0.15); }
+
+/* ── Storage group (dashed wrapper around GDrive + iCloud) ── */
+.storage-group {
+  border: 1.5px dashed rgba(86,180,233,0.35);
+  border-radius: 12px;
+  padding: 8px;
+  background: rgba(86,180,233,0.02);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.storage-group-label {
+  font-size: 7.5px; text-transform: uppercase; letter-spacing: 2px;
+  color: rgba(86,180,233,0.4); text-align: center;
+}
+.storage-group-inner { display: flex; gap: 8px; flex: 1; align-items: stretch; }
+
+/* ── Mobile / Responsive ── */
+@media (max-width: 900px) {
+  .page { min-width: unset; padding: 16px 12px 32px; }
+  .row { flex-direction: column; }
+  .layer-label {
+    width: auto; min-width: unset; padding-right: 0; padding-top: 0;
+    text-align: left; display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  }
+  .layer-label .lnum { display: none; }
+  .layer-label .lname { font-size: 13px; color: #64748b; font-weight: 700; }
+  .row-content { flex-wrap: wrap; }
+  .row-content .node { flex: 1 1 calc(50% - 8px) !important; min-width: 150px; }
+  .sil-band { padding: 10px 8px; }
+  .sil-inner { flex-direction: column; gap: 8px; }
+  .connector { margin-left: 0; flex-wrap: wrap; justify-content: center; }
+  .divider { margin-left: 0; }
+  .flow-strip { margin-left: 0; flex-wrap: wrap; justify-content: center; gap: 5px; }
+  .lifecycle-section { margin-left: 0; }
+  .lc-row { flex-wrap: wrap; gap: 4px; }
+  .am-wrapper { flex-direction: column; }
+  .am-spacer-left, .am-spacer-right { display: none; }
+  .am-col { width: 100%; }
+  .bottom-section { margin-left: 0; flex-direction: column; }
+  .legend, .scaling, .governance { min-width: unset; }
+  .legend-grid { grid-template-columns: 1fr; }
+  .storage-group { flex: 1 1 100% !important; }
+  .storage-group-inner { flex-direction: column; }
+  .footer { margin-left: 0; }
+  #arrows-svg { display: none; }
+}
+
 /* ── Pulses ── */
 @keyframes craft-pulse {
   0%, 100% { box-shadow: 0 0 28px rgba(122,30,122,0.18); }
@@ -455,25 +508,25 @@ body {
   </div>
   <div class="row-content">
 
-    <div class="node n-ba" style="flex:1;" id="ba-sip">
-      <div class="node-name">⚡ BA-SIP</div>
+    <div class="node n-ba" style="flex:1;" id="ba-sipp">
+      <div class="node-name">💧 BA-SIPP</div>
       <div class="node-desc">SIPP Mobile App<br>Content · Growth · Product · Ops</div>
       <div style="margin-top:6px;">
-        <div class="mcp-tag">google-sip</div>
-        <div class="mcp-tag">meta-sip</div>
-        <div class="mcp-tag">linear-sip</div>
+        <div class="mcp-tag">google-sipp</div>
+        <div class="mcp-tag">meta-sipp</div>
+        <div class="mcp-tag">linear-sipp</div>
       </div>
       <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
     </div>
 
-    <div class="node n-ba" style="flex:1.1;" id="ba-whos">
-      <div class="node-name">☕ BA-Who's Coffee</div>
-      <div class="node-desc">E-commerce brand<br>Content · Growth · Product · Ops</div>
+    <div class="node n-ba" style="flex:1.1;" id="ba-wic">
+      <div class="node-name">☕ BA-WIC</div>
+      <div class="node-desc">Who Is Coffee · E-commerce brand<br>Content · Growth · Product · Ops</div>
       <div style="margin-top:6px;">
-        <div class="mcp-tag">google-whos</div>
-        <div class="mcp-tag">klaviyo-whos</div>
-        <div class="mcp-tag">meta-whos</div>
-        <div class="mcp-tag">shopify-whos</div>
+        <div class="mcp-tag">google-wic</div>
+        <div class="mcp-tag">klaviyo-wic</div>
+        <div class="mcp-tag">meta-wic</div>
+        <div class="mcp-tag">shopify-wic</div>
       </div>
       <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
     </div>
@@ -748,21 +801,46 @@ body {
       </div>
     </div>
 
-    <!-- GOOGLE DRIVE -->
-    <div class="node n-gdrive" style="flex:1.3;" id="node-gdrive">
-      <div class="storage-hint" style="color:var(--green);">🗂 File Storage</div>
-      <div class="node-name" style="font-size:14px;">💾 GOOGLE DRIVE</div>
-      <div class="node-desc" style="font-size:10px; line-height:1.7;">
-        Large files · Brand assets<br>
-        Ad creatives · Decks<br>
-        One Drive per business
-      </div>
-      <div style="margin-top:7px; font-size:9px; color:#2a5a2a;">SIP · Who's · Catalyzing · Bidsters · Clubhouse · Personal</div>
-      <div style="margin-top:7px;">
-        <span class="tag" style="color:#86efac; border-color:rgba(58,122,30,0.4); background:rgba(58,122,30,0.1);">×6 Drive accounts</span>
-        <span class="tag" style="color:#86efac; border-color:rgba(58,122,30,0.4); background:rgba(58,122,30,0.1);">BA-authenticated access</span>
-      </div>
-    </div>
+    <!-- FILE STORAGE GROUP -->
+    <div class="storage-group" style="flex:2.7;">
+      <div class="storage-group-label">☁ File Storage</div>
+      <div class="storage-group-inner">
+
+        <!-- GOOGLE DRIVE -->
+        <div class="node n-gdrive" style="flex:1;" id="node-gdrive">
+          <div class="storage-hint" style="color:var(--green);">🗂 Google Drive</div>
+          <div class="node-name" style="font-size:14px;">💾 GOOGLE DRIVE</div>
+          <div class="node-desc" style="font-size:10px; line-height:1.7;">
+            Large files · Brand assets<br>
+            Ad creatives · Decks<br>
+            One Drive per business
+          </div>
+          <div style="margin-top:7px; font-size:9px; color:#2a5a2a;">SIPP · WIC · Catalyzing · Bidsters · Clubhouse · Personal</div>
+          <div style="margin-top:7px;">
+            <span class="tag" style="color:#86efac; border-color:rgba(58,122,30,0.4); background:rgba(58,122,30,0.1);">×6 Drive accounts</span>
+            <span class="tag" style="color:#86efac; border-color:rgba(58,122,30,0.4); background:rgba(58,122,30,0.1);">BA-authenticated access</span>
+          </div>
+        </div>
+
+        <!-- ICLOUD DRIVE -->
+        <div class="node n-icloud" style="flex:1;" id="node-icloud">
+          <div class="storage-hint" style="color:#5ac8fa;">☁ iCloud Drive</div>
+          <div class="node-name" style="font-size:14px;">☁️ BenOS / iCloud</div>
+          <div class="node-desc" style="font-size:10px; line-height:1.7;">
+            Local BenOS directory<br>
+            Skills · Config · Architecture<br>
+            Synced via iCloud Drive
+          </div>
+          <div style="margin-top:7px; font-size:9px; color:#1a3a5a;">~/Library/Mobile Documents/BenOS</div>
+          <div style="margin-top:7px;">
+            <span class="tag" style="color:#5ac8fa; border-color:rgba(26,58,90,0.6); background:rgba(26,58,90,0.2);">Local-first</span>
+            <span class="tag" style="color:#5ac8fa; border-color:rgba(26,58,90,0.6); background:rgba(26,58,90,0.2);">iCloud synced</span>
+            <span class="tag" style="color:#5ac8fa; border-color:rgba(26,58,90,0.6); background:rgba(26,58,90,0.2);">Claude Code root</span>
+          </div>
+        </div>
+
+      </div><!-- /storage-group-inner -->
+    </div><!-- /storage-group -->
 
   </div>
 </div>
@@ -823,17 +901,17 @@ body {
 
     <div class="node n-mcp" style="min-width:160px; flex:1.4;">
       <div class="node-name">🔧 Google Workspace MCPs</div>
-      <div class="node-desc" style="font-size:8.5px;">×6 accounts — one per business<br>SIP · Who's · Cat · Bid · Club · Personal<br>Calendar, Docs, Gmail, Drive</div>
+      <div class="node-desc" style="font-size:8.5px;">×6 accounts — one per business<br>SIPP · WIC · Cat · Bid · Club · Personal<br>Calendar, Docs, Gmail, Drive</div>
     </div>
 
     <div class="node n-mcp" style="min-width:130px; flex:1;">
       <div class="node-name">📧 Klaviyo MCP</div>
-      <div class="node-desc" style="font-size:8.5px;">Who's Coffee · SIP<br>Email marketing automation<br>Flows, campaigns, profiles</div>
+      <div class="node-desc" style="font-size:8.5px;">WIC · SIPP<br>Email marketing automation<br>Flows, campaigns, profiles</div>
     </div>
 
     <div class="node n-mcp" style="min-width:130px; flex:1;">
       <div class="node-name">📱 Meta Ads MCP</div>
-      <div class="node-desc" style="font-size:8.5px;">Who's Coffee · SIP<br>Paid social advertising<br>Ad sets, creatives, reporting</div>
+      <div class="node-desc" style="font-size:8.5px;">WIC · SIPP<br>Paid social advertising<br>Ad sets, creatives, reporting</div>
     </div>
 
     <div class="node n-mcp" style="min-width:120px; flex:1;">
@@ -858,7 +936,7 @@ body {
 
     <div class="node n-mcp" style="min-width:120px; flex:1;">
       <div class="node-name">🛍 Shopify MCP</div>
-      <div class="node-desc" style="font-size:8.5px;">E-commerce platform<br>Who's Coffee store<br>Products, orders, inventory</div>
+      <div class="node-desc" style="font-size:8.5px;">E-commerce platform<br>Who Is Coffee (WIC) store<br>Products, orders, inventory</div>
     </div>
 
     <div class="node n-mcp" style="min-width:110px; flex:0.9;">
@@ -920,6 +998,10 @@ body {
       <div class="legend-item">
         <div class="legend-swatch" style="border:2px solid #3a7a1e; background:rgba(58,122,30,0.15);"></div>
         Google Drive — File Storage
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="border:2px solid #1a3a5a; background:rgba(26,58,90,0.2);"></div>
+        iCloud Drive — Local BenOS Dir
       </div>
       <div class="legend-item">
         <div class="legend-swatch" style="border:2px solid #333; background:rgba(30,30,40,0.5);"></div>
@@ -1015,8 +1097,8 @@ body {
     'node-coo':    ['node-ea', 'node-sc', 'node-jan', 'node-craft'],
     'node-sc':     ['node-coo', 'node-craft'],
     'node-jan':    ['node-ea', 'node-coo', 'node-craft'],
-    'ba-sip':      ['node-craft', 'node-ea'],
-    'ba-whos':     ['node-craft', 'node-ea'],
+    'ba-sipp':     ['node-craft', 'node-ea'],
+    'ba-wic':      ['node-craft', 'node-ea'],
     'ba-cat':      ['node-craft', 'node-ea', 'am-a', 'am-b', 'am-n'],
     'ba-bid':      ['node-craft', 'node-ea'],
     'ba-club':     ['node-craft', 'node-ea'],
@@ -1027,7 +1109,8 @@ body {
     'am-n':        ['node-craft', 'ba-cat'],
     'node-craft':  ['node-ea', 'node-linear', 'node-coo'],
     'node-linear': ['node-craft'],
-    'node-gdrive': [],
+    'node-gdrive': ['node-icloud'],
+    'node-icloud': ['node-gdrive'],
   };
 
   function clearHighlights() {
@@ -1176,7 +1259,7 @@ body {
           'rgba(191,140,0,0.4)', null, '4,3', 1.5, 0.5);
 
     // ── BA nodes → Craft (write briefs) ──
-    const baIds = ['ba-sip','ba-whos','ba-cat','ba-bid','ba-club','ba-personal','ba-health'];
+    const baIds = ['ba-sipp','ba-wic','ba-cat','ba-bid','ba-club','ba-personal','ba-health'];
     baIds.forEach(id => {
       const ba = getRect(id);
       if (!ba) return;

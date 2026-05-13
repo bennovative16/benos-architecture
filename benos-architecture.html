@@ -513,6 +513,23 @@ body {
 .drawer-meta-key { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: #2d3748; margin-bottom: 3px; }
 .drawer-meta-val { font-size: 11px; color: var(--text-muted); font-family: 'Consolas','SF Mono',monospace; }
 
+/* ── Rendered skill markdown ── */
+.dr-loading { color: #334155; font-size: 11px; font-style: italic; padding: 8px 0; }
+.dr-empty   { color: #334155; font-size: 11px; }
+.dr-content { font-size: 11px; color: var(--text-muted); line-height: 1.75; }
+.dr-content h1 { font-size: 14px; font-weight: 700; color: var(--text); margin: 16px 0 6px; }
+.dr-content h2 { font-size: 12px; font-weight: 700; color: var(--text); margin: 14px 0 5px; border-bottom: 1px solid #1a2030; padding-bottom: 4px; }
+.dr-content h3 { font-size: 10px; font-weight: 700; color: #64748b; margin: 12px 0 4px; text-transform: uppercase; letter-spacing: 1px; }
+.dr-content p  { margin: 0 0 8px; }
+.dr-content ul, .dr-content ol { margin: 0 0 8px; padding-left: 18px; }
+.dr-content li { margin: 3px 0; }
+.dr-content pre { background: #0a0e17; border: 1px solid #1a2030; border-radius: 5px; padding: 10px 12px; overflow-x: auto; margin: 8px 0; }
+.dr-content pre code { font-size: 10px; font-family: 'Consolas','SF Mono',monospace; color: #94a3b8; white-space: pre; background: none; padding: 0; border-radius: 0; }
+.dr-content code { background: rgba(74,158,255,0.07); color: #4a9eff; padding: 1px 5px; border-radius: 3px; font-family: 'Consolas','SF Mono',monospace; font-size: 10px; }
+.dr-content hr  { border: none; border-top: 1px solid #1a2030; margin: 14px 0; }
+.dr-content strong { color: var(--text); font-weight: 700; }
+.dr-content blockquote { border-left: 2px solid #2d3748; margin: 8px 0; padding: 4px 12px; color: #475569; font-style: italic; }
+
 /* ── Pulses ── */
 @keyframes craft-pulse {
   0%, 100% { box-shadow: 0 0 28px rgba(122,30,122,0.18); }
@@ -1792,17 +1809,65 @@ function renderSkillsTable() {
     `${totalSkills} skills · ${totalTools} tools · ${builtCount} live`;
 }
 
+// ── Markdown renderer (no external deps) ─────────────────────────────────────
+function renderMd(raw) {
+  // Strip YAML frontmatter
+  let text = raw.replace(/^---[\s\S]*?---\s*\n/, '');
+
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Fenced code blocks
+  text = text.replace(/```[\w]*\n([\s\S]*?)```/g, (_, code) =>
+    `<pre><code>${esc(code.trimEnd())}</code></pre>`);
+
+  // Inline code
+  text = text.replace(/`([^`\n]+)`/g, (_, c) => `<code>${esc(c)}</code>`);
+
+  // Blockquotes
+  text = text.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+
+  // Headers
+  text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  text = text.replace(/^## (.+)$/gm,  '<h2>$1</h2>');
+  text = text.replace(/^# (.+)$/gm,   '<h1>$1</h1>');
+
+  // Bold + italic
+  text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  text = text.replace(/\*\*(.+?)\*\*/g,     '<strong>$1</strong>');
+  text = text.replace(/\*(.+?)\*/g,         '<em>$1</em>');
+
+  // Horizontal rules
+  text = text.replace(/^---+$/gm, '<hr>');
+
+  // Lists — collect consecutive li lines into ul/ol
+  text = text.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+  text = text.replace(/^\d+\. (.+)$/gm, '<oli>$1</oli>');
+  text = text.replace(/(<li>.*<\/li>\n?)+/g,  m => `<ul>${m}</ul>`);
+  text = text.replace(/(<oli>.*<\/oli>\n?)+/g, m => `<ol>${m.replace(/<\/?oli>/g, s => s.replace('oli','li'))}</ol>`);
+
+  // Paragraphs (skip blocks that are already block-level HTML)
+  text = text.split(/\n{2,}/).map(block => {
+    block = block.trim();
+    if (!block) return '';
+    if (/^<(h[1-3]|ul|ol|pre|hr|blockquote)/.test(block)) return block;
+    return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+  }).join('\n');
+
+  return text;
+}
+
 // ── Skill Drawer ─────────────────────────────────────────────────────────────
 function openDrawer(skillName) {
   const entry = registryData.find(r => r.name === skillName || r.name === '/' + skillName);
   if (!entry) return;
 
-  const apiColor = { 'Green':'db-green', 'Yellow':'db-yellow', 'Red':'db-red' }[entry.apiStatus] || 'db-gray';
-  const statusColor = { 'live':'db-green', 'building':'db-yellow', 'planned':'db-blue', 'deferred':'db-gray' }[entry.status || 'planned'];
-  const sourceColor = { 'Native':'db-blue', 'OpenClaudia':'db-green', 'Antigravity':'db-purple', 'HoC Suite':'db-amber', 'Built-in':'db-gray' }[entry.source || 'Native'];
+  const apiColor    = { 'Green':'db-green','Yellow':'db-yellow','Red':'db-red' }[entry.apiStatus] || 'db-gray';
+  const statusColor = { 'live':'db-green','building':'db-yellow','planned':'db-blue','deferred':'db-gray' }[entry.status || 'planned'];
+  const sourceColor = { 'Native':'db-blue','OpenClaudia':'db-green','Antigravity':'db-purple','HoC Suite':'db-amber','Built-in':'db-gray' }[entry.source || 'Native'];
 
   const ventures = (entry.ventures || ['—']).map(v => `<span class="drawer-venture">${v}</span>`).join('');
-  const triggers = (entry.triggers || []).map(t => `<span class="drawer-trigger">${t}</span>`).join('');
+  const triggers  = (entry.triggers  || []).map(t => `<span class="drawer-trigger">${t}</span>`).join('');
+  const hasFile   = entry.type === 'skill' && entry.created;
 
   document.getElementById('drawer-title').textContent = entry.name;
   document.getElementById('drawer-body').innerHTML = `
@@ -1835,22 +1900,10 @@ function openDrawer(skillName) {
     <div class="drawer-section">
       <div class="drawer-section-label">Status</div>
       <div class="drawer-meta-grid">
-        <div class="drawer-meta-item">
-          <div class="drawer-meta-key">Version</div>
-          <div class="drawer-meta-val">${entry.version || '—'}</div>
-        </div>
-        <div class="drawer-meta-item">
-          <div class="drawer-meta-key">Last Run</div>
-          <div class="drawer-meta-val">${entry.lastRun || '—'}</div>
-        </div>
-        <div class="drawer-meta-item">
-          <div class="drawer-meta-key">Total Runs</div>
-          <div class="drawer-meta-val">${entry.totalRuns || '—'}</div>
-        </div>
-        <div class="drawer-meta-item">
-          <div class="drawer-meta-key">Group</div>
-          <div class="drawer-meta-val">${entry.group || '—'}</div>
-        </div>
+        <div class="drawer-meta-item"><div class="drawer-meta-key">Version</div><div class="drawer-meta-val">${entry.version || '—'}</div></div>
+        <div class="drawer-meta-item"><div class="drawer-meta-key">Last Run</div><div class="drawer-meta-val">${entry.lastRun || '—'}</div></div>
+        <div class="drawer-meta-item"><div class="drawer-meta-key">Total Runs</div><div class="drawer-meta-val">${entry.totalRuns || '—'}</div></div>
+        <div class="drawer-meta-item"><div class="drawer-meta-key">Group</div><div class="drawer-meta-val">${entry.group || '—'}</div></div>
       </div>
     </div>
 
@@ -1859,11 +1912,43 @@ function openDrawer(skillName) {
       <div class="drawer-section-label">COO Notes</div>
       <div class="drawer-notes">${entry.notes}</div>
     </div>` : ''}
+
+    ${hasFile ? `
+    <div class="drawer-section" style="border-top:1px solid #1a2030;padding-top:16px;margin-top:4px;">
+      <div class="drawer-section-label">Skill Instructions</div>
+      <div id="drawer-skill-content" class="dr-loading">Fetching skill file…</div>
+    </div>` : ''}
   `;
 
   document.getElementById('drawer-backdrop').classList.add('open');
   document.getElementById('skill-drawer').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  if (hasFile) fetchSkillContent(skillName);
+}
+
+async function fetchSkillContent(skillName) {
+  const clean = skillName.replace(/^\//, '');
+  const base  = 'https://raw.githubusercontent.com/bennovative16/benos-architecture/main/';
+  let content = null;
+
+  for (const path of [`skills/${clean}/${clean}.md`, `skills/${clean}/SKILL.md`]) {
+    try {
+      const res = await fetch(base + path);
+      if (res.ok) { content = await res.text(); break; }
+    } catch(_) {}
+  }
+
+  const el = document.getElementById('drawer-skill-content');
+  if (!el) return;
+
+  if (content) {
+    el.className = 'dr-content';
+    el.innerHTML = renderMd(content);
+  } else {
+    el.className = 'dr-empty';
+    el.textContent = 'No skill file found in repository yet.';
+  }
 }
 
 function closeDrawer() {

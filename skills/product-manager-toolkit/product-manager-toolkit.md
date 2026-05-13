@@ -1,0 +1,435 @@
+# Product Manager Toolkit
+
+| Field | Value |
+|---|---|
+| **Skill Name** | product-manager-toolkit |
+| **Source** | Antigravity |
+| **BenOS Fit** | 4/5 |
+| **Ventures** | SIPP, Bennovative |
+| **API Status** | Green |
+| **Voice Injection** | Light |
+| **Group** | PRODUCT DEV |
+| **Triggers** | "prioritize features", "PRD", "product roadmap", "RICE", "feature spec", "product requirements" |
+| **Customize Level** | LIGHT |
+
+## Purpose
+
+Essential tools and frameworks for modern product management, from discovery to delivery. Covers feature prioritization (RICE), customer discovery, PRD writing, and roadmap planning.
+
+## Triggers
+
+Activate this skill when the user says:
+- "prioritize features" / "prioritize my backlog"
+- "PRD" / "product requirements document"
+- "product roadmap"
+- "RICE" / "RICE score"
+- "feature spec"
+- "product requirements"
+
+## Inputs
+
+- Feature list or backlog items (for prioritization)
+- Customer interview transcripts (for discovery analysis)
+- Feature idea or problem statement (for PRD creation)
+- Team capacity (person-months per quarter)
+
+## Outputs
+
+- RICE-scored feature priority list
+- Synthesized customer discovery insights
+- Completed PRD (Standard, One-Page, Agile Epic, or Feature Brief)
+- Quarterly roadmap with capacity plan
+
+## BenOS Integrations
+
+- **Linear MCP**: PRD → issue creation workflow. After writing a PRD, create a Linear issue with the PRD summary in the description and RICE score as priority.
+- **Craft**: Primary PRD storage. Link to Craft documents from Linear issues for full PRD access.
+- **GitHub MCP**: SIPP Flutter app feature tracking. For SIPP features, create a GitHub issue linking back to the Linear ticket.
+- **Pairs with `ai-product` skill**: For SIPP AI feature work, use `ai-product` alongside this skill to layer in AI/ML considerations.
+
+## Customization Notes
+
+- Generic tool references updated: "your project tool" = Linear, "your docs" = Craft
+- BenOS PRD Workflow callout added after PRD template section
+- Venture-specific examples added for SIPP and Bennovative
+- One concrete example added per major toolkit section (RICE, PRD)
+
+---
+
+# Product Manager Toolkit — Full Instructions
+
+Essential tools and frameworks for modern product management, from discovery to delivery.
+
+## Quick Start
+
+### For Feature Prioritization
+```bash
+python scripts/rice_prioritizer.py sample  # Create sample CSV
+python scripts/rice_prioritizer.py sample_features.csv --capacity 15
+```
+
+### For Interview Analysis
+```bash
+python scripts/customer_interview_analyzer.py interview_transcript.txt
+```
+
+### For PRD Creation
+1. Choose template from `references/prd_templates.md`
+2. Fill in sections based on discovery work
+3. Review with stakeholders
+4. Version control in Craft (your docs)
+
+## Core Workflows
+
+### Feature Prioritization Process
+
+1. **Gather Feature Requests**
+   - Customer feedback
+   - Sales requests
+   - Technical debt
+   - Strategic initiatives
+
+2. **Score with RICE**
+   ```bash
+   # Create CSV with: name,reach,impact,confidence,effort
+   python scripts/rice_prioritizer.py features.csv
+   ```
+   - **Reach**: Users affected per quarter
+   - **Impact**: massive/high/medium/low/minimal
+   - **Confidence**: high/medium/low
+   - **Effort**: xl/l/m/s/xs (person-months)
+
+   **Example (SIPP):**
+   > Bluetooth hardware sync: Reach=500, Impact=massive, Confidence=high, Effort=l → RICE ~300. Dashboard color themes: Reach=500, Impact=low, Confidence=medium, Effort=s → RICE ~50. Hardware sync wins by 6x.
+
+3. **Analyze Portfolio**
+   - Review quick wins vs big bets
+   - Check effort distribution
+   - Validate against strategy
+
+4. **Generate Roadmap**
+   - Quarterly capacity planning
+   - Dependency mapping
+   - Stakeholder alignment
+
+### Customer Discovery Process
+
+1. **Conduct Interviews**
+   - Use semi-structured format
+   - Focus on problems, not solutions
+   - Record with permission
+
+2. **Analyze Insights**
+   ```bash
+   python scripts/customer_interview_analyzer.py transcript.txt
+   ```
+   Extracts:
+   - Pain points with severity
+   - Feature requests with priority
+   - Jobs to be done
+   - Sentiment analysis
+   - Key themes and quotes
+
+3. **Synthesize Findings**
+   - Group similar pain points
+   - Identify patterns across interviews
+   - Map to opportunity areas
+
+4. **Validate Solutions**
+   - Create solution hypotheses
+   - Test with prototypes
+   - Measure actual vs expected behavior
+
+### PRD Development Process
+
+1. **Choose Template**
+   - **Standard PRD**: Complex features (6-8 weeks)
+   - **One-Page PRD**: Simple features (2-4 weeks)
+   - **Feature Brief**: Exploration phase (1 week)
+   - **Agile Epic**: Sprint-based delivery
+
+2. **Structure Content**
+   - Problem → Solution → Success Metrics
+   - Always include out-of-scope
+   - Clear acceptance criteria
+
+3. **Collaborate**
+   - Engineering for feasibility
+   - Design for experience
+   - Sales for market validation
+   - Support for operational impact
+
+> **BenOS PRD Workflow:**
+> After writing a PRD, create a Linear issue via MCP: include the PRD summary in the issue description, set priority using the RICE score, and link to the full PRD in Craft. For SIPP Flutter features, also create a GitHub issue linking to the Linear ticket.
+
+> **For SIPP:**
+> Primary use case: SIPP Flutter mobile app feature backlog. Use RICE to prioritize: hardware integration features (Reach: all users) vs. nice-to-have dashboard customizations. Customer interview signals come from waitlist survey responses.
+
+> **For Bennovative:**
+> Use for structuring new product ideas or side projects. PRD template helps validate before building. RICE keeps scope tight for solo-founder constraints.
+
+## Key Scripts
+
+### rice_prioritizer.py
+Advanced RICE framework implementation with portfolio analysis.
+
+**Features**:
+- RICE score calculation
+- Portfolio balance analysis (quick wins vs big bets)
+- Quarterly roadmap generation
+- Team capacity planning
+- Multiple output formats (text/json/csv)
+
+**Usage Examples**:
+```bash
+# Basic prioritization
+python scripts/rice_prioritizer.py features.csv
+
+# With custom team capacity (person-months per quarter)
+python scripts/rice_prioritizer.py features.csv --capacity 20
+
+# Output as JSON for integration
+python scripts/rice_prioritizer.py features.csv --output json
+```
+
+### customer_interview_analyzer.py
+NLP-based interview analysis for extracting actionable insights.
+
+**Capabilities**:
+- Pain point extraction with severity assessment
+- Feature request identification and classification
+- Jobs-to-be-done pattern recognition
+- Sentiment analysis
+- Theme extraction
+- Competitor mentions
+- Key quotes identification
+
+**Usage Examples**:
+```bash
+# Analyze single interview
+python scripts/customer_interview_analyzer.py interview.txt
+
+# Output as JSON for aggregation
+python scripts/customer_interview_analyzer.py interview.txt json
+```
+
+## Reference Documents
+
+### prd_templates.md
+Multiple PRD formats for different contexts:
+
+1. **Standard PRD Template**
+   - Comprehensive 11-section format
+   - Best for major features
+   - Includes technical specs
+
+2. **One-Page PRD**
+   - Concise format for quick alignment
+   - Focus on problem/solution/metrics
+   - Good for smaller features
+
+3. **Agile Epic Template**
+   - Sprint-based delivery
+   - User story mapping
+   - Acceptance criteria focus
+
+4. **Feature Brief**
+   - Lightweight exploration
+   - Hypothesis-driven
+   - Pre-PRD phase
+
+**Example (One-Page PRD — SIPP Workout Summary Screen):**
+> **Problem**: Users can't review completed workout data without leaving the app. **Solution**: Add a post-workout summary screen showing reps, sets, and sensor readings. **Success Metric**: 60% of users view summary screen after workout completion within 30 days of launch. **Out of Scope**: Export to CSV, sharing to social media.
+
+## Prioritization Frameworks
+
+### RICE Framework
+```
+Score = (Reach × Impact × Confidence) / Effort
+
+Reach: # of users/quarter
+Impact: 
+  - Massive = 3x
+  - High = 2x
+  - Medium = 1x
+  - Low = 0.5x
+  - Minimal = 0.25x
+Confidence:
+  - High = 100%
+  - Medium = 80%
+  - Low = 50%
+Effort: Person-months
+```
+
+**Example — SIPP Feature Comparison:**
+| Feature | Reach | Impact | Confidence | Effort | RICE Score |
+|---|---|---|---|---|---|
+| BLE Hardware Sync | 500 | Massive (3) | High (1.0) | 2 | 750 |
+| Dark Mode | 500 | Low (0.5) | High (1.0) | 0.5 | 500 |
+| CSV Export | 100 | Medium (1) | Medium (0.8) | 1 | 80 |
+
+BLE Hardware Sync wins — it's the core differentiator for SIPP.
+
+### Value vs Effort Matrix
+```
+         Low Effort    High Effort
+         
+High     QUICK WINS    BIG BETS
+Value    [Prioritize]   [Strategic]
+         
+Low      FILL-INS      TIME SINKS
+Value    [Maybe]       [Avoid]
+```
+
+### MoSCoW Method
+- **Must Have**: Critical for launch
+- **Should Have**: Important but not critical
+- **Could Have**: Nice to have
+- **Won't Have**: Out of scope
+
+## Discovery Frameworks
+
+### Customer Interview Guide
+```
+1. Context Questions (5 min)
+   - Role and responsibilities
+   - Current workflow
+   - Tools used
+
+2. Problem Exploration (15 min)
+   - Pain points
+   - Frequency and impact
+   - Current workarounds
+
+3. Solution Validation (10 min)
+   - Reaction to concepts
+   - Value perception
+   - Willingness to pay
+
+4. Wrap-up (5 min)
+   - Other thoughts
+   - Referrals
+   - Follow-up permission
+```
+
+### Hypothesis Template
+```
+We believe that [building this feature]
+For [these users]
+Will [achieve this outcome]
+We'll know we're right when [metric]
+```
+
+### Opportunity Solution Tree
+```
+Outcome
+├── Opportunity 1
+│   ├── Solution A
+│   └── Solution B
+└── Opportunity 2
+    ├── Solution C
+    └── Solution D
+```
+
+## Metrics & Analytics
+
+### North Star Metric Framework
+1. **Identify Core Value**: What's the #1 value to users?
+2. **Make it Measurable**: Quantifiable and trackable
+3. **Ensure It's Actionable**: Teams can influence it
+4. **Check Leading Indicator**: Predicts business success
+
+### Funnel Analysis Template
+```
+Acquisition → Activation → Retention → Revenue → Referral
+
+Key Metrics:
+- Conversion rate at each step
+- Drop-off points
+- Time between steps
+- Cohort variations
+```
+
+### Feature Success Metrics
+- **Adoption**: % of users using feature
+- **Frequency**: Usage per user per time period
+- **Depth**: % of feature capability used
+- **Retention**: Continued usage over time
+- **Satisfaction**: NPS/CSAT for feature
+
+## Best Practices
+
+### Writing Great PRDs
+1. Start with the problem, not solution
+2. Include clear success metrics upfront
+3. Explicitly state what's out of scope
+4. Use visuals (wireframes, flows)
+5. Keep technical details in appendix
+6. Version control changes in Craft
+
+### Effective Prioritization
+1. Mix quick wins with strategic bets
+2. Consider opportunity cost
+3. Account for dependencies
+4. Buffer for unexpected work (20%)
+5. Revisit quarterly
+6. Communicate decisions clearly
+
+### Customer Discovery Tips
+1. Ask "why" 5 times
+2. Focus on past behavior, not future intentions
+3. Avoid leading questions
+4. Interview in their environment
+5. Look for emotional reactions
+6. Validate with data
+
+### Stakeholder Management
+1. Identify RACI for decisions
+2. Regular async updates
+3. Demo over documentation
+4. Address concerns early
+5. Celebrate wins publicly
+6. Learn from failures openly
+
+## Common Pitfalls to Avoid
+
+1. **Solution-First Thinking**: Jumping to features before understanding problems
+2. **Analysis Paralysis**: Over-researching without shipping
+3. **Feature Factory**: Shipping features without measuring impact
+4. **Ignoring Technical Debt**: Not allocating time for platform health
+5. **Stakeholder Surprise**: Not communicating early and often
+6. **Metric Theater**: Optimizing vanity metrics over real value
+
+## Integration Points
+
+- **Analytics**: Amplitude, Mixpanel, Google Analytics
+- **Roadmapping**: Linear (primary for BenOS), ProductBoard, Aha!
+- **Design**: Figma, Sketch, Miro
+- **Development**: Linear (primary), GitHub
+- **Research**: Dovetail, UserVoice, Pendo
+- **Communication**: Slack, Craft (primary docs), Notion
+
+## Quick Commands Cheat Sheet
+
+```bash
+# Prioritization
+python scripts/rice_prioritizer.py features.csv --capacity 15
+
+# Interview Analysis
+python scripts/customer_interview_analyzer.py interview.txt
+
+# Create sample data
+python scripts/rice_prioritizer.py sample
+
+# JSON outputs for integration
+python scripts/rice_prioritizer.py features.csv --output json
+python scripts/customer_interview_analyzer.py interview.txt json
+```
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

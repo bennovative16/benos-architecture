@@ -346,6 +346,8 @@ body {
   font-size: 8.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
   white-space: nowrap;
 }
+.gb-sil      { background: rgba(240,192,48,0.1);  color: #f0c030;  border: 1px solid rgba(240,192,48,0.25); }
+.gb-ba       { background: rgba(99,179,237,0.1);  color: #63b3ed;  border: 1px solid rgba(99,179,237,0.2); }
 .gb-sales    { background: rgba(74,158,255,0.1);  color: #4a9eff;  border: 1px solid rgba(74,158,255,0.2); }
 .gb-marketing{ background: rgba(251,146,60,0.1);  color: #fb923c;  border: 1px solid rgba(251,146,60,0.2); }
 .gb-content  { background: rgba(192,132,252,0.1); color: #c084fc;  border: 1px solid rgba(192,132,252,0.2); }
@@ -585,7 +587,7 @@ body {
       <div class="sil-inner">
 
         <!-- EA -->
-        <div class="node n-ea" style="flex:1.1;" id="node-ea">
+        <div class="node n-ea" style="flex:1.1;cursor:pointer;" id="node-ea" onclick="openDrawer('ea')" title="Click for details">
           <div class="node-name">🧠 Executive Assistant (EA)</div>
           <div class="node-desc">
             Cross-business prioritization · Trade-off visibility<br>
@@ -603,7 +605,7 @@ body {
         </div>
 
         <!-- COO -->
-        <div class="node n-coo" style="flex:1.15;" id="node-coo">
+        <div class="node n-coo" style="flex:1.15;cursor:pointer;" id="node-coo" onclick="openDrawer('coo')" title="Click for details">
           <div class="node-name">⚙️ COO</div>
           <div class="node-desc" style="font-size:9px;">
             Chief Operating Officer Skill<br>
@@ -623,7 +625,7 @@ body {
         </div>
 
         <!-- Skill-Creator -->
-        <div class="node n-sc" style="flex:1;" id="node-sc">
+        <div class="node n-sc" style="flex:1;cursor:pointer;" id="node-sc" onclick="openDrawer('skill-creator')" title="Click for details">
           <div class="node-name">🔧 Skill-Creator</div>
           <div class="node-desc" style="font-size:9px;">
             Receives Skill Brief from COO<br>
@@ -641,7 +643,7 @@ body {
         </div>
 
         <!-- Janitor -->
-        <div class="node n-jan" style="flex:1.05;" id="node-jan">
+        <div class="node n-jan" style="flex:1.05;cursor:pointer;" id="node-jan" onclick="openDrawer('janitor')" title="Click for details">
           <div class="node-name">🧹 Janitor</div>
           <div class="node-desc" style="font-size:9px;">
             Daily light run + weekly deep (Saturday, before COO)<br>
@@ -681,7 +683,7 @@ body {
   </div>
   <div class="row-content">
 
-    <div class="node n-ba" style="flex:1;" id="ba-sipp">
+    <div class="node n-ba" style="flex:1;cursor:pointer;" id="ba-sipp" onclick="openDrawer('ba-sipp')" title="Click for details">
       <div class="node-name">💧 BA-SIPP</div>
       <div class="node-desc">SIPP Mobile App<br>Content · Growth · Product · Ops</div>
       <div style="margin-top:6px;">
@@ -692,7 +694,7 @@ body {
       <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
     </div>
 
-    <div class="node n-ba" style="flex:1.1;" id="ba-wic">
+    <div class="node n-ba" style="flex:1.1;cursor:pointer;" id="ba-wic" onclick="openDrawer('ba-wic')" title="Click for details">
       <div class="node-name">☕ BA-WIC</div>
       <div class="node-desc">Who Is Coffee · E-commerce brand<br>Content · Growth · Product · Ops</div>
       <div style="margin-top:6px;">
@@ -704,7 +706,7 @@ body {
       <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
     </div>
 
-    <div class="node n-ba-cat" style="flex:1.15;" id="ba-cat">
+    <div class="node n-ba-cat" style="flex:1.15;cursor:pointer;" id="ba-cat" onclick="openDrawer('ba-cat')" title="Click for details">
       <div class="node-name">🎯 BA-Catalyzing Concepts</div>
       <div class="node-desc">TABA consulting<br>Client oversight · Ops · Coordinates AMs ↓</div>
       <div style="margin-top:6px;">
@@ -714,7 +716,7 @@ body {
       <div style="margin-top:5px; font-size:8px; color:#48bb78;">↓ spawns AM-[client] skills</div>
     </div>
 
-    <div class="node n-ba" style="flex:1;" id="ba-bid">
+    <div class="node n-ba" style="flex:1;cursor:pointer;" id="ba-bid" onclick="openDrawer('ba-bid')" title="Click for details">
       <div class="node-name">🔨 BA-Bidsters</div>
       <div class="node-desc">Bidding platform<br>Content · Growth · Product · Ops</div>
       <div style="margin-top:6px;">
@@ -724,7 +726,7 @@ body {
       <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
     </div>
 
-    <div class="node n-ba" style="flex:1;" id="ba-club">
+    <div class="node n-ba" style="flex:1;cursor:pointer;" id="ba-club" onclick="openDrawer('ba-club')" title="Click for details">
       <div class="node-name">🏌️ BA-Clubhouse</div>
       <div class="node-desc">Fantasy golf app<br>Content · Growth · Product · Ops</div>
       <div style="margin-top:6px;">
@@ -734,7 +736,7 @@ body {
       <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
     </div>
 
-    <div class="node n-ba" style="flex:1.05;" id="ba-personal">
+    <div class="node n-ba" style="flex:1.05;cursor:pointer;" id="ba-personal" onclick="openDrawer('ba-personal')" title="Click for details">
       <div class="node-name">📢 BA-Personal Brand</div>
       <div class="node-desc">Thought leadership<br>Content · Growth · Audience · Ops</div>
       <div style="margin-top:6px;">
@@ -745,7 +747,7 @@ body {
       <div style="margin-top:5px; font-size:8px; color:var(--text-dim);">→ writes brief to Craft</div>
     </div>
 
-    <div class="node n-ba-health" style="flex:1;" id="ba-health">
+    <div class="node n-ba-health" style="flex:1;cursor:pointer;" id="ba-health" onclick="openDrawer('ba-health')" title="Click for details">
       <div class="node-name">🔍 BA-BenOS Health</div>
       <div class="node-desc">Reads Craft only<br>Flags stale data · Goal drift · Conflicts</div>
       <div style="margin-top:6px;">
@@ -1686,6 +1688,19 @@ const registryData = [
   { type:'skill', name:'returns-reverse-logistics', group:'OPS & PLANNING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC'], description:'RMA workflows, product grading (A/B/C/D), disposition decision trees, and fraud detection. Craft SOP reference for WIC physical returns.', triggers:['returns','reverse logistics','RMA','customer return','refund process'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'More depth than WIC needs today, but valuable as a Craft SOP.' },
   { type:'skill', name:'email-systems',          group:'OPS & PLANNING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC'], description:'Email infrastructure reference — SPF/DKIM/DMARC setup, transactional vs marketing IP separation. Drop in when wiring SIPP transactional emails.', triggers:['email infrastructure','SPF DKIM','email deliverability','transactional email'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Technical reference. Use when setting up SIPP transactional email.' },
   { type:'skill', name:'scientific-writing',     group:'OPS & PLANNING', source:'Antigravity', status:'deferred', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['CC'], description:'IMRAD, CONSORT/STROBE/PRISMA citation styles. For CC clients submitting journal publications as Phase II deliverables.', triggers:['scientific writing','journal article','research paper','IMRAD'], apiStatus:'Green', voiceInjection:'Light', effort:'2hr', notes:'Deferred. Activate when CC takes on a research-heavy biomedical engagement.' },
+  // ── SYSTEM INTELLIGENCE LAYER ────────────────────────────────────────────
+  { type:'skill', name:'ea',            group:'SYSTEM INTELLIGENCE', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Executive Assistant — cross-business prioritization, trade-off visibility, daily agenda compilation, goal tracking vs actuals. Reads BA briefs from Craft. No direct tool credentials.', triggers:['EA','executive assistant','daily brief','agenda'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Receives critical flags from Janitor (immediate). Writes daily agenda → Craft.' },
+  { type:'skill', name:'coo',           group:'SYSTEM INTELLIGENCE', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Chief Operating Officer — skill lifecycle (intake → brief → registry), tool governance, token/usage efficiency (≥85% target), Saturday audit → EA Monday brief. Says NO by default on new tools.', triggers:['COO','operating officer','governance','skill audit','efficiency review'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Hands off to skill-creator. Never builds directly. Owns tool-registry + system-config.' },
+  { type:'skill', name:'skill-creator', group:'SYSTEM INTELLIGENCE', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Skill-Creator — receives Skill Brief from COO, builds SKILL.md files, writes to skills directory. Ben approves between COO and SC. Only builds — never defines.', triggers:['skill creator','build a skill','new skill','SKILL.md'], apiStatus:'Green', voiceInjection:'None', effort:'TBD', notes:'COO-gated intake. Writes: skills/ directory and Craft/91 Examples.' },
+  { type:'skill', name:'janitor',       group:'SYSTEM INTELLIGENCE', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Janitor — daily light run + weekly deep (Saturday, before COO). Four entropy domains: file, task, comms, knowledge. Idea backlog lifecycle management. Never deletes unilaterally — proposes only.', triggers:['janitor','entropy','cleanup','backlog triage','idea lifecycle'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Critical flags → EA (immediate). Patterns → COO Saturday. Writes: 99/janitor-logs/ and 04/triage actions.' },
+  // ── BUSINESS ASSISTANTS ───────────────────────────────────────────────────
+  { type:'skill', name:'ba-sipp',       group:'BUSINESS ASSISTANTS', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['SIPP'], description:'BA-SIPP — Business Assistant for the SIPP Mobile App. Handles Content, Growth, Product, and Ops. Writes structured briefs to Craft for EA to read.', triggers:['BA-SIPP','SIPP assistant','SIPP brief'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Authenticated to: google-sipp, meta-sipp, linear-sipp.' },
+  { type:'skill', name:'ba-wic',        group:'BUSINESS ASSISTANTS', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['WIC'], description:'BA-WIC — Business Assistant for Who Is Coffee. E-commerce brand across Content, Growth, Product, Ops. Writes structured briefs to Craft.', triggers:['BA-WIC','WIC assistant','Who Is Coffee brief'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Authenticated to: google-wic, klaviyo-wic, meta-wic, shopify-wic.' },
+  { type:'skill', name:'ba-cat',        group:'BUSINESS ASSISTANTS', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['CC'], description:'BA-Catalyzing Concepts — Business Assistant for TABA consulting. Client oversight, Ops, and coordinates Account Managers. Spawns AM-[client] skills.', triggers:['BA-Cat','Catalyzing Concepts','CC assistant','client oversight'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Authenticated to: google-cat, linear-cat. Spawns AM nodes.' },
+  { type:'skill', name:'ba-bid',        group:'BUSINESS ASSISTANTS', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['Bennovative'], description:'BA-Bidsters — Business Assistant for the Bidsters platform. Content, Growth, Product, Ops.', triggers:['BA-Bid','Bidsters assistant'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Authenticated to: google-bid, linear-bid.' },
+  { type:'skill', name:'ba-club',       group:'BUSINESS ASSISTANTS', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['Bennovative'], description:'BA-Clubhouse — Business Assistant for the Clubhouse fantasy golf app. Content, Growth, Product, Ops.', triggers:['BA-Club','Clubhouse assistant','fantasy golf assistant'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Authenticated to: google-club, linear-club.' },
+  { type:'skill', name:'ba-personal',   group:'BUSINESS ASSISTANTS', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['Bennovative'], description:'BA-Personal Brand — Business Assistant for thought leadership. Content, Growth, Audience, Ops. Manages Substack and YouTube presence.', triggers:['BA-Personal','personal brand assistant','thought leadership'], apiStatus:'Green', voiceInjection:'Heavy', effort:'TBD', notes:'Authenticated to: google-personal, substack, youtube.' },
+  { type:'skill', name:'ba-health',     group:'BUSINESS ASSISTANTS', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'BA-BenOS Health — read-only Craft MCP access. Flags stale data, goal drift, and conflicts. Pings EA on issues. Does not write.', triggers:['BenOS health','system health','goal drift','stale data'], apiStatus:'Green', voiceInjection:'None', effort:'TBD', notes:'Read-only. Pings EA on issues.' },
   // ── MCPs & TOOLS ─────────────────────────────────────────────────────────
   { type:'tool', name:'Google Workspace MCP', group:'MCPs & TOOLS', note:'×6 — SIPP · WIC · Cat · Bid · Club · Personal', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Google Workspace suite — Calendar, Docs, Gmail, Drive across all businesses.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
   { type:'tool', name:'Klaviyo MCP',          group:'MCPs & TOOLS', note:'WIC · SIPP', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP'], description:'Email marketing automation — flows, campaigns, profiles.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
@@ -1700,12 +1715,14 @@ const registryData = [
 ];
 
 const groupMeta = {
-  'SALES':            { cls:'gb-sales',     label:'Sales'            },
-  'MARKETING':        { cls:'gb-marketing', label:'Marketing'        },
-  'CONTENT CREATION': { cls:'gb-content',   label:'Content Creation' },
-  'PRODUCT DEV':      { cls:'gb-product',   label:'Product Dev'      },
-  'OPS & PLANNING':   { cls:'gb-ops',       label:'Ops & Planning'   },
-  'MCPs & TOOLS':     { cls:'gb-tools',     label:'MCPs & Tools'     },
+  'SYSTEM INTELLIGENCE': { cls:'gb-sil',     label:'System Intelligence' },
+  'BUSINESS ASSISTANTS': { cls:'gb-ba',      label:'Business Assistants' },
+  'SALES':               { cls:'gb-sales',   label:'Sales'               },
+  'MARKETING':           { cls:'gb-marketing',label:'Marketing'          },
+  'CONTENT CREATION':    { cls:'gb-content', label:'Content Creation'    },
+  'PRODUCT DEV':         { cls:'gb-product', label:'Product Dev'         },
+  'OPS & PLANNING':      { cls:'gb-ops',     label:'Ops & Planning'      },
+  'MCPs & TOOLS':        { cls:'gb-tools',   label:'MCPs & Tools'        },
 };
 
 function sourceBadge(source) {

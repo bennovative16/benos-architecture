@@ -428,6 +428,89 @@ body {
   #arrows-svg { display: none; }
 }
 
+/* ── Skill Drawer ── */
+.drawer-backdrop {
+  display: none; position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(2px);
+}
+.drawer-backdrop.open { display: block; }
+
+.skill-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 101;
+  width: min(480px, 92vw);
+  background: #0f1117; border-left: 1px solid #1e293b;
+  transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;
+}
+.skill-drawer.open { transform: translateX(0); }
+
+@media (max-width: 600px) {
+  .skill-drawer {
+    top: auto; left: 0; right: 0; bottom: 0; width: 100%;
+    max-height: 80vh; border-left: none;
+    border-top: 1px solid #1e293b; border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+  }
+  .skill-drawer.open { transform: translateY(0); }
+}
+
+.drawer-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 20px 20px 14px; border-bottom: 1px solid #1a2030;
+  position: sticky; top: 0; background: #0f1117; z-index: 2;
+}
+.drawer-title { font-size: 16px; font-weight: 700; color: var(--text); font-family: 'Consolas','SF Mono',monospace; }
+.drawer-close {
+  width: 28px; height: 28px; border-radius: 6px; border: 1px solid #2d3748;
+  background: transparent; color: #64748b; cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 12px;
+  transition: background 0.1s, color 0.1s;
+}
+.drawer-close:hover { background: #1e293b; color: var(--text); }
+
+.drawer-body { padding: 16px 20px 32px; flex: 1; }
+
+.drawer-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.db-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 4px; font-size: 9px;
+  font-weight: 700; letter-spacing: 0.5px; white-space: nowrap; border: 1px solid;
+}
+.db-green  { background: rgba(72,187,120,0.1);  color: #48bb78; border-color: rgba(72,187,120,0.3); }
+.db-yellow { background: rgba(212,168,71,0.1);  color: #d4a847; border-color: rgba(212,168,71,0.3); }
+.db-red    { background: rgba(255,68,68,0.08);  color: #f87171; border-color: rgba(255,68,68,0.25); }
+.db-blue   { background: rgba(74,158,255,0.08); color: #4a9eff; border-color: rgba(74,158,255,0.2); }
+.db-purple { background: rgba(192,132,252,0.08);color: #c084fc; border-color: rgba(192,132,252,0.2); }
+.db-gray   { background: rgba(100,116,139,0.08);color: #64748b; border-color: rgba(100,116,139,0.2); }
+.db-amber  { background: rgba(212,168,71,0.08); color: #d4a847; border-color: rgba(212,168,71,0.2); }
+
+.drawer-section { margin-bottom: 18px; }
+.drawer-section-label {
+  font-size: 8.5px; text-transform: uppercase; letter-spacing: 2px;
+  color: #2d3748; margin-bottom: 7px; font-weight: 700;
+}
+.drawer-desc { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+.drawer-notes { font-size: 11px; color: #475569; line-height: 1.6; font-style: italic; }
+.drawer-triggers { display: flex; flex-wrap: wrap; gap: 5px; }
+.drawer-trigger {
+  padding: 3px 9px; border-radius: 4px; font-size: 10px;
+  background: rgba(74,158,255,0.06); color: #3b82f6;
+  border: 1px solid rgba(74,158,255,0.15); font-family: 'Consolas','SF Mono',monospace;
+}
+.drawer-ventures { display: flex; flex-wrap: wrap; gap: 5px; }
+.drawer-venture {
+  padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: 600;
+  background: rgba(212,168,71,0.08); color: #a88a3d;
+  border: 1px solid rgba(212,168,71,0.18);
+}
+.drawer-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.drawer-meta-item {
+  background: #0d1117; border: 1px solid #1a2030; border-radius: 6px; padding: 8px 12px;
+}
+.drawer-meta-key { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: #2d3748; margin-bottom: 3px; }
+.drawer-meta-val { font-size: 11px; color: var(--text-muted); font-family: 'Consolas','SF Mono',monospace; }
+
 /* ── Pulses ── */
 @keyframes craft-pulse {
   0%, 100% { box-shadow: 0 0 28px rgba(122,30,122,0.18); }
@@ -737,14 +820,14 @@ body {
       <div class="node-name">💼 SALES</div>
       <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
       <div class="skill-list">
-        <span class="skill-pill">/prospect-research</span>
-        <span class="skill-pill">/cold-email</span>
-        <span class="skill-pill">/follow-up</span>
-        <span class="skill-pill">/wholesale-outreach</span>
-        <span class="skill-pill">/proposal</span>
-        <span class="skill-pill">/client-onboard</span>
-        <span class="skill-pill">taba-proposal</span>
-        <span class="skill-pill">taba-phase1</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/prospect-research')">/prospect-research</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/cold-email')">/cold-email</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/follow-up')">/follow-up</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/wholesale-outreach')">/wholesale-outreach</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/proposal')">/proposal</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/client-onboard')">/client-onboard</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('taba-proposal')">taba-proposal</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('taba-phase1')">taba-phase1</span>
       </div>
     </div>
 
@@ -752,13 +835,13 @@ body {
       <div class="node-name">📣 MARKETING</div>
       <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
       <div class="skill-list">
-        <span class="skill-pill">/ad-brief</span>
-        <span class="skill-pill">/ad-copy</span>
-        <span class="skill-pill">/ad-performance-review</span>
-        <span class="skill-pill">/email-campaign</span>
-        <span class="skill-pill">/email-flow</span>
-        <span class="skill-pill">/email-performance-review</span>
-        <span class="skill-pill">/landing-page</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/ad-brief')">/ad-brief</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/ad-copy')">/ad-copy</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/ad-performance-review')">/ad-performance-review</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/email-campaign')">/email-campaign</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/email-flow')">/email-flow</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/email-performance-review')">/email-performance-review</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/landing-page')">/landing-page</span>
       </div>
     </div>
 
@@ -766,17 +849,17 @@ body {
       <div class="node-name">✍️ CONTENT CREATION</div>
       <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
       <div class="skill-list">
-        <span class="skill-pill">/capture</span>
-        <span class="skill-pill">/idea-to-campaign</span>
-        <span class="skill-pill">/content-campaign</span>
-        <span class="skill-pill">/long-form-essay</span>
-        <span class="skill-pill">/newsletter</span>
-        <span class="skill-pill">/linkedin</span>
-        <span class="skill-pill">/social-post</span>
-        <span class="skill-pill">/youtube-script</span>
-        <span class="skill-pill">/video-short</span>
-        <span class="skill-pill">/repurpose</span>
-        <span class="skill-pill">/visual-brief</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/capture')">/capture</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/idea-to-campaign')">/idea-to-campaign</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/content-campaign')">/content-campaign</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/long-form-essay')">/long-form-essay</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/newsletter')">/newsletter</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/linkedin')">/linkedin</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/social-post')">/social-post</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/youtube-script')">/youtube-script</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/video-short')">/video-short</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/repurpose')">/repurpose</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/visual-brief')">/visual-brief</span>
       </div>
     </div>
 
@@ -784,13 +867,13 @@ body {
       <div class="node-name">⚙️ PRODUCT DEV</div>
       <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
       <div class="skill-list">
-        <span class="skill-pill">/feature-spec</span>
-        <span class="skill-pill">/prd</span>
-        <span class="skill-pill">/code-review</span>
-        <span class="skill-pill">/release-notes</span>
-        <span class="skill-pill">/bug-report</span>
-        <span class="skill-pill">clubhouse-workflow</span>
-        <span class="skill-pill">sipp-code-review</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/feature-spec')">/feature-spec</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/prd')">/prd</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/code-review')">/code-review</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/release-notes')">/release-notes</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/bug-report')">/bug-report</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('clubhouse-workflow')">clubhouse-workflow</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('sipp-code-review')">sipp-code-review</span>
       </div>
     </div>
 
@@ -798,14 +881,14 @@ body {
       <div class="node-name">📋 OPS &amp; PLANNING</div>
       <div class="node-desc" style="font-size:8.5px; color:#64748b;">Context-fed from BenOS · Shared across all businesses</div>
       <div class="skill-list">
-        <span class="skill-pill">/morning-standup</span>
-        <span class="skill-pill">/weekly-plan</span>
-        <span class="skill-pill">/monthly-plan</span>
-        <span class="skill-pill">/quarterly-plan</span>
-        <span class="skill-pill">/backlog-review</span>
-        <span class="skill-pill">/weekly-rollup</span>
-        <span class="skill-pill">/sync-to-linear</span>
-        <span class="skill-pill">/client-monthly-report</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/morning-standup')">/morning-standup</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/weekly-plan')">/weekly-plan</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/monthly-plan')">/monthly-plan</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/quarterly-plan')">/quarterly-plan</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/backlog-review')">/backlog-review</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/weekly-rollup')">/weekly-rollup</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/sync-to-linear')">/sync-to-linear</span>
+        <span class="skill-pill" style="cursor:pointer;" onclick="openDrawer('/client-monthly-report')">/client-monthly-report</span>
       </div>
     </div>
 
@@ -1189,6 +1272,7 @@ body {
         <th style="width:36px;">Type</th>
         <th>Name</th>
         <th>Group</th>
+        <th>Source</th>
         <th>Status</th>
         <th>Last Run</th>
         <th>Total Runs</th>
@@ -1199,6 +1283,16 @@ body {
 </div>
 
 </div><!-- /page -->
+
+<!-- ── Skill Drawer ── -->
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
+<div class="skill-drawer" id="skill-drawer" role="dialog" aria-modal="true">
+  <div class="drawer-header">
+    <div class="drawer-title" id="drawer-title">skill-name</div>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
 
 <script>
 (function() {
@@ -1511,65 +1605,98 @@ function switchView(view) {
 }
 
 // ── Skills & Tools data ──────────────────────────────────────────────────────
-// created: true when SKILL.md exists. lastRun / totalRuns wired from log file later.
 const registryData = [
   // ── SALES ────────────────────────────────────────────────────────────────
-  { type:'skill', name:'/prospect-research',   group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/cold-email',          group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/follow-up',           group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/wholesale-outreach',  group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/proposal',            group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/client-onboard',      group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'taba-proposal',        group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'taba-phase1',          group:'SALES',            created:false, lastRun:'—', totalRuns:'—' },
+  { type:'skill', name:'/prospect-research',  group:'SALES', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/cold-email',         group:'SALES', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/follow-up',          group:'SALES', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/wholesale-outreach', group:'SALES', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/proposal',           group:'SALES', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/client-onboard',     group:'SALES', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'taba-proposal',       group:'SALES', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['CC'], description:'Generates a complete TABA proposal document for SBIR Phase I awardees.', triggers:['taba proposal','TABA proposal','write a TABA'], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'taba-phase1',         group:'SALES', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['CC'], description:'Generates a complete NASEM TABA Phase 1 document.', triggers:['taba phase 1','NASEM TABA','phase 1 TABA'], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'cold-email',          group:'SALES', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['CC'], description:'Anti-template cold outreach framework. "Peer not vendor" positioning. SBIR/STTR-specific personalization signals for CC relaunch.', triggers:['cold email','outreach sequence','prospect email','CC outreach'], apiStatus:'Green', voiceInjection:'Heavy', effort:'2hr', notes:'Pair with apollo-outreach. Customize with Phase I award signals and TABA eligibility framing.' },
+  { type:'skill', name:'sales-enablement',    group:'SALES', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['CC','WIC'], description:'Pitch deck, one-pager, and objection-handling templates. Maps to CC consultancy proposals and SBIR Phase II commercialization decks.', triggers:['sales deck','pitch deck','one-pager','objection handling','wholesale pitch'], apiStatus:'Green', voiceInjection:'Light', effort:'2hr', notes:'Add TABA/deep-tech examples and WIC wholesale collateral.' },
+  { type:'skill', name:'apollo-outreach',     group:'SALES', source:'OpenClaudia', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['CC'], description:'Prospect researcher and outreach sequencer using Apollo.io. Critical for CC relaunch targeting SBIR Phase I awardees.', triggers:['prospect research','apollo','outreach sequence','find prospects'], apiStatus:'Yellow', voiceInjection:'Light', effort:'2hr', notes:'Apollo.io API key needed. Highest-leverage skill for CC relaunch pipeline.' },
+  { type:'skill', name:'linkedin-profile-optimizer', group:'SALES', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['Bennovative','CC'], description:'Profile roast + full rewrite workflow. One-time use but high-value for Bennovative personal brand and CC authority positioning.', triggers:['LinkedIn profile','profile rewrite','optimize LinkedIn'], apiStatus:'Green', voiceInjection:'Heavy', effort:'1.5hr', notes:'Customize keyword sets for deep-tech/SBIR/commercialization and stoic-builder persona.' },
   // ── MARKETING ────────────────────────────────────────────────────────────
-  { type:'skill', name:'/ad-brief',                group:'MARKETING',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/ad-copy',                 group:'MARKETING',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/ad-performance-review',   group:'MARKETING',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/email-campaign',          group:'MARKETING',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/email-flow',              group:'MARKETING',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/email-performance-review',group:'MARKETING',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/landing-page',            group:'MARKETING',    created:false, lastRun:'—', totalRuns:'—' },
+  { type:'skill', name:'/ad-brief',                 group:'MARKETING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/ad-copy',                  group:'MARKETING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/ad-performance-review',    group:'MARKETING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/email-campaign',           group:'MARKETING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/email-flow',               group:'MARKETING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/email-performance-review', group:'MARKETING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/landing-page',             group:'MARKETING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'paid-ads',                  group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP'], description:'Platform-aware paid ad strategy covering Meta and Google. Wires directly to Meta Ads MCP in stack.', triggers:['paid ads','ad strategy','Meta ads','run ads','ad campaign'], apiStatus:'Green', voiceInjection:'Light', effort:'2hr', notes:'Customize with WIC $3k/mo revenue context and SIPP pre-launch waitlist play.' },
+  { type:'skill', name:'email-sequence',            group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP','Bennovative'], description:'Welcome, nurture, re-engagement, and post-purchase email frameworks. Wired to Klaviyo MCP for execution.', triggers:['email sequence','email flow','welcome series','nurture sequence','Klaviyo flow'], apiStatus:'Green', voiceInjection:'Heavy', effort:'2hr', notes:'Split into WIC transactional (Shopify) and Bennovative newsletter (Substack) execution paths.' },
+  { type:'skill', name:'lead-magnets',              group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Lead magnet strategy framework. Plans gated content, checklists, and downloadable offers that convert visitors to subscribers.', triggers:['lead magnet','gated content','email capture','downloadable','opt-in offer'], apiStatus:'Green', voiceInjection:'Heavy', effort:'1.5hr', notes:'Already reads product-marketing-context. Build that skill first.' },
+  { type:'skill', name:'landing-page-generator',    group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Next.js/React/Tailwind landing page generator using PAS/AIDA/BAB frameworks. 5 hero variants, SEO meta, structured data.', triggers:['landing page','build a page','waitlist page','product page','hero section'], apiStatus:'Green', voiceInjection:'Light', effort:'take-as-is', notes:'Integrates with brand_voice_analyzer from content-creator. Drop in.' },
+  { type:'skill', name:'popup-cro',                 group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP'], description:'Respectful popup strategy — timing, trigger selection, one-popup-one-job principle. For WIC email capture and SIPP waitlist conversion.', triggers:['popup','exit intent','email capture popup','signup form'], apiStatus:'Green', voiceInjection:'Light', effort:'1hr', notes:'Pair with Klaviyo signup forms for WIC and SIPP waitlist.' },
+  { type:'skill', name:'page-cro',                  group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP'], description:'Page-level conversion rate optimization with a 100-point readiness index. Audit-first approach.', triggers:['page CRO','conversion audit','improve conversions','optimize page'], apiStatus:'Green', voiceInjection:'Light', effort:'1hr', notes:'Pair with popup-cro and landing-page-generator as a full CRO stack.' },
+  { type:'skill', name:'onboarding-cro',            group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC'], description:'Aha-moment identification and time-to-value optimization. Apply to SIPP app first-run flow and WIC first-bag experience.', triggers:['onboarding','activation','aha moment','first-run','time to value'], apiStatus:'Green', voiceInjection:'Light', effort:'1.5hr', notes:'Pair with churn-prevention.' },
+  { type:'skill', name:'churn-prevention',          group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP'], description:'Cancel-flow design and dunning playbook. Maps to WIC coffee subscription and SIPP post-launch retention.', triggers:['churn','cancel flow','dunning','retention','subscription lapse'], apiStatus:'Green', voiceInjection:'Light', effort:'2hr', notes:'Wire to Shopify Subscriptions billing and Klaviyo dunning sequences.' },
+  { type:'skill', name:'app-store-optimization',    group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP'], description:'Apple App Store and Google Play metadata optimization — title, keywords, screenshots, A/B testing. Pre-launch for SIPP mobile app.', triggers:['ASO','app store','app listing','Play Store','app keywords'], apiStatus:'Green', voiceInjection:'Light', effort:'1.5hr', notes:'Run pre-launch. Customize with SIPP positioning keywords: smart home, water quality, IoT.' },
+  { type:'skill', name:'market-sizing-analysis',    group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['CC','SIPP','WIC'], description:'Top-down, bottom-up, and value-theory TAM/SAM/SOM frameworks. Core deliverable for every CC TABA engagement.', triggers:['market sizing','TAM SAM SOM','market opportunity','addressable market'], apiStatus:'Green', voiceInjection:'Light', effort:'1.5hr', notes:'Add SBIR-flavored commercialization plan templates from prior CC engagements.' },
+  { type:'skill', name:'startup-business-analyst-business-case', group:'MARKETING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['CC','SIPP'], description:'Investor-ready business case generator with market-sizing, financial-modeling, and competitive-landscape sub-skills.', triggers:['business case','commercialization plan','investor brief','Phase II narrative'], apiStatus:'Green', voiceInjection:'Light', effort:'2hr', notes:'Customize for SBIR-flavored business cases (differ from VC pitch on risk framing and market pull).' },
+  { type:'skill', name:'x-research',               group:'MARKETING', source:'HoC Suite', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC','Bennovative','SIPP'], description:'X/Twitter content outlier research using Apify Tweet Scraper. Engagement-weighted scoring (bookmarks 4x, replies 3x) surfaces highest-signal posts.', triggers:['X research','Twitter research','content research','what performs on X'], apiStatus:'Green', voiceInjection:'Light', effort:'1hr', notes:'Apify already paid and Green. Highest-ROI install in HoC suite. Do first.' },
   // ── CONTENT CREATION ─────────────────────────────────────────────────────
-  { type:'skill', name:'/capture',          group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/idea-to-campaign', group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/content-campaign', group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/long-form-essay',  group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/newsletter',       group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/linkedin',         group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/social-post',      group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/youtube-script',   group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/video-short',      group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/repurpose',        group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/visual-brief',     group:'CONTENT CREATION',    created:false, lastRun:'—', totalRuns:'—' },
+  { type:'skill', name:'/capture',              group:'CONTENT CREATION', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Zero-friction idea capture skill.', triggers:['capture','log idea','save this'], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/idea-to-campaign',     group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/content-campaign',     group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/long-form-essay',      group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/newsletter',           group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/linkedin',             group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/social-post',          group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/youtube-script',       group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/video-short',          group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/repurpose',            group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/visual-brief',         group:'CONTENT CREATION', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'product-marketing-context', group:'CONTENT CREATION', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Keystone context file generator. Produces a .agents/product-marketing-context.md per venture that every other marketing skill reads before firing. Build 4 times — once per venture.', triggers:['set up marketing context','venture context','product context','brand context'], apiStatus:'Green', voiceInjection:'Heavy', effort:'1hr ×4', notes:'Build this FIRST before any other marketing skill. Downstream skills become significantly more accurate once these exist.' },
+  { type:'skill', name:'copy-editing',          group:'CONTENT CREATION', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Seven Sweeps sequential editing framework: Clarity → Voice → Concision → Flow → Persuasion → Power → Final. Applies to any output across all ventures.', triggers:['copy edit','edit this','proofread','refine copy','polish'], apiStatus:'Green', voiceInjection:'Heavy', effort:'1.5hr', notes:'Customize sweeps with 4 venture voice profiles.' },
+  { type:'skill', name:'content-creator',       group:'CONTENT CREATION', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Full content engine bundling brand_voice_analyzer.py and seo_optimizer.py scripts. Run brand_voice_analyzer against each venture to lock 4 distinct voice profiles.', triggers:['create content','content engine','brand voice','SEO content','blog post'], apiStatus:'Green', voiceInjection:'Heavy', effort:'3hr', notes:'Highest-value content skill in the set. Pair with social-content and copy-editing.' },
+  { type:'skill', name:'social-content',        group:'CONTENT CREATION', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Multi-platform social content library (LinkedIn, X, Instagram, etc.) with 4 distinct venture voice profiles. Heaviest voice injection target in the batch.', triggers:['social post','social content','write for Instagram','LinkedIn post','X post'], apiStatus:'Green', voiceInjection:'Heavy', effort:'3hr', notes:'Build 4 voice profiles: CC professional/authority, WIC playful/sensory, SIPP technical/aspirational, Bennovative stoic/builder.' },
+  { type:'skill', name:'content-repurposing',   group:'CONTENT CREATION', source:'OpenClaudia', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Repurposes long-form content across platforms and formats. Highest leverage for a solo founder — one piece of content becomes many.', triggers:['repurpose','turn this into','adapt for','content repurposing'], apiStatus:'Green', voiceInjection:'Light', effort:'1hr', notes:'Works across all 4 ventures. Pair with social-content.' },
+  { type:'skill', name:'micro-saas-launcher',   group:'CONTENT CREATION', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['Bennovative','SIPP'], description:'Indie hacker MVP-to-revenue framework. Strategic lens for any new product idea aligned to solo-founder constraints and BenOS workflows.', triggers:['launch a product','new product idea','MVP launch','validate idea'], apiStatus:'Green', voiceInjection:'Light', effort:'2hr', notes:'Align to BenOS workflows and actual solo-founder stack.' },
   // ── PRODUCT DEV ──────────────────────────────────────────────────────────
-  { type:'skill', name:'/feature-spec',     group:'PRODUCT DEV',         created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/prd',              group:'PRODUCT DEV',         created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/code-review',      group:'PRODUCT DEV',         created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/release-notes',    group:'PRODUCT DEV',         created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/bug-report',       group:'PRODUCT DEV',         created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'clubhouse-workflow',group:'PRODUCT DEV',         created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'sipp-code-review',  group:'PRODUCT DEV',         created:false, lastRun:'—', totalRuns:'—' },
+  { type:'skill', name:'/feature-spec',         group:'PRODUCT DEV', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/prd',                  group:'PRODUCT DEV', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/code-review',          group:'PRODUCT DEV', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/release-notes',        group:'PRODUCT DEV', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/bug-report',           group:'PRODUCT DEV', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'clubhouse-workflow',     group:'PRODUCT DEV', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Development workflow management skill for the Clubhouse venture.', triggers:['clubhouse','workflow'], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'sipp-code-review',      group:'PRODUCT DEV', source:'Native', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['SIPP'], description:'Reviews Flutter code submitted for SIPP development.', triggers:['sipp code review','Flutter review'], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'product-manager-toolkit', group:'PRODUCT DEV', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','Bennovative'], description:'RICE prioritization, PRD templates, and customer interview analysis. Bundles rice_prioritizer.py and customer_interview_analyzer.py scripts.', triggers:['prioritize features','PRD','product roadmap','RICE','feature spec'], apiStatus:'Green', voiceInjection:'Light', effort:'1.5hr', notes:'Customize PRD templates to match Linear MCP workflow.' },
+  { type:'skill', name:'design-taste-frontend', group:'PRODUCT DEV', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','Bennovative'], description:'React/Next.js/Tailwind anti-slop rules. Banned fonts (Inter), banned layouts (centered hero), banned colors (AI purple). Drops in whenever Claude writes frontend code.', triggers:['frontend code','React component','UI code','Tailwind','design code'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Pair with high-end-visual-design and redesign-existing-projects as a 3-skill design stack.' },
+  { type:'skill', name:'high-end-visual-design', group:'PRODUCT DEV', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['Bennovative','SIPP'], description:'Awwwards-tier visual design directives. Banned fonts (Inter/Roboto/Arial), nested CTA architecture, fluid motion choreography.', triggers:['visual design','premium design','design system','high-end UI'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Part of 3-skill design stack with design-taste-frontend and redesign-existing-projects.' },
+  { type:'skill', name:'redesign-existing-projects', group:'PRODUCT DEV', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','Bennovative'], description:'Audit existing UI and apply premium fixes without a full rewrite. Companion to design-taste-frontend.', triggers:['redesign','improve UI','polish design','UI audit','fix the design'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Drop in whenever polishing an existing surface.' },
+  { type:'skill', name:'stitch-ui-design',      group:'PRODUCT DEV', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','Bennovative'], description:'Prompting guide for Google Stitch UI prototyping. Companion to stitch-design-taste.', triggers:['Stitch','Google Stitch','UI prototype','Stitch design'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Use when bootstrapping new UI prototypes in Google Stitch.' },
+  { type:'skill', name:'stitch-design-taste',   group:'PRODUCT DEV', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','Bennovative'], description:'Generates Google Stitch DESIGN.md design system files. Useful one-off when bootstrapping a UI in Stitch.', triggers:['Stitch design system','DESIGN.md','Stitch design taste'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Pair with stitch-ui-design.' },
+  { type:'skill', name:'ai-product',            group:'PRODUCT DEV', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','Bennovative'], description:'LLM integration patterns — structured output, streaming, cost optimization, prompt versioning. Reference for SIPP AI features.', triggers:['LLM integration','AI features','Claude API','structured output'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Drop in as a code reference for SIPP AI feature development.' },
+  { type:'skill', name:'instagram-research',    group:'PRODUCT DEV', source:'HoC Suite', status:'deferred', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC','Bennovative'], description:'Instagram content outlier research using Apify + Gemini. Reel hook extraction identifies high-performing content patterns.', triggers:['Instagram research','reel analysis','Instagram content research'], apiStatus:'Yellow', voiceInjection:'Light', effort:'1.5hr', notes:'Requires GEMINI_API_KEY. Install after sourcing that key.' },
+  { type:'skill', name:'video-content-analyzer', group:'PRODUCT DEV', source:'HoC Suite', status:'deferred', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC','CC','Bennovative'], description:'Gemini-powered video hook and format analyzer. Infrastructure skill consumed by instagram-research and youtube-research.', triggers:['analyze video','video hooks','video format analysis'], apiStatus:'Yellow', voiceInjection:'None', effort:'0.5hr', notes:'Requires GEMINI_API_KEY. Install alongside instagram-research.' },
   // ── OPS & PLANNING ───────────────────────────────────────────────────────
-  { type:'skill', name:'/morning-standup',      group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/weekly-plan',          group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/monthly-plan',         group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/quarterly-plan',       group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/backlog-review',       group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/weekly-rollup',        group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/sync-to-linear',       group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
-  { type:'skill', name:'/client-monthly-report',group:'OPS & PLANNING',  created:false, lastRun:'—', totalRuns:'—' },
+  { type:'skill', name:'/morning-standup',       group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/weekly-plan',           group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/monthly-plan',          group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/quarterly-plan',        group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/backlog-review',        group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/weekly-rollup',         group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/sync-to-linear',        group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'/client-monthly-report', group:'OPS & PLANNING', source:'Native', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Planned native BenOS skill.', triggers:[], apiStatus:'Green', voiceInjection:'Light', effort:'TBD', notes:'' },
+  { type:'skill', name:'returns-reverse-logistics', group:'OPS & PLANNING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['WIC'], description:'RMA workflows, product grading (A/B/C/D), disposition decision trees, and fraud detection. Craft SOP reference for WIC physical returns.', triggers:['returns','reverse logistics','RMA','customer return','refund process'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'More depth than WIC needs today, but valuable as a Craft SOP.' },
+  { type:'skill', name:'email-systems',          group:'OPS & PLANNING', source:'Antigravity', status:'planned', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['SIPP','WIC'], description:'Email infrastructure reference — SPF/DKIM/DMARC setup, transactional vs marketing IP separation. Drop in when wiring SIPP transactional emails.', triggers:['email infrastructure','SPF DKIM','email deliverability','transactional email'], apiStatus:'Green', voiceInjection:'None', effort:'take-as-is', notes:'Technical reference. Use when setting up SIPP transactional email.' },
+  { type:'skill', name:'scientific-writing',     group:'OPS & PLANNING', source:'Antigravity', status:'deferred', created:false, version:'—', lastRun:'—', totalRuns:'—', ventures:['CC'], description:'IMRAD, CONSORT/STROBE/PRISMA citation styles. For CC clients submitting journal publications as Phase II deliverables.', triggers:['scientific writing','journal article','research paper','IMRAD'], apiStatus:'Green', voiceInjection:'Light', effort:'2hr', notes:'Deferred. Activate when CC takes on a research-heavy biomedical engagement.' },
   // ── MCPs & TOOLS ─────────────────────────────────────────────────────────
-  { type:'tool', name:'Google Workspace MCP', group:'MCPs & TOOLS', note:'×6 — SIPP · WIC · Cat · Bid · Club · Personal', created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Klaviyo MCP',          group:'MCPs & TOOLS', note:'WIC · SIPP',          created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Meta Ads MCP',         group:'MCPs & TOOLS', note:'WIC · SIPP',          created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Linear MCP',           group:'MCPs & TOOLS', note:'All dev businesses',  created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Craft MCP',            group:'MCPs & TOOLS', note:'All agents',           created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Shopify MCP',          group:'MCPs & TOOLS', note:'WIC store',            created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Figma MCP',            group:'MCPs & TOOLS', note:'Design assets',        created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Higgsfield',           group:'MCPs & TOOLS', note:'AI video generation',  created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'Substack',             group:'MCPs & TOOLS', note:'Personal Brand',       created:true, lastRun:'—', totalRuns:'—' },
-  { type:'tool', name:'YouTube',              group:'MCPs & TOOLS', note:'Personal Brand',       created:true, lastRun:'—', totalRuns:'—' },
+  { type:'tool', name:'Google Workspace MCP', group:'MCPs & TOOLS', note:'×6 — SIPP · WIC · Cat · Bid · Club · Personal', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Google Workspace suite — Calendar, Docs, Gmail, Drive across all businesses.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Klaviyo MCP',          group:'MCPs & TOOLS', note:'WIC · SIPP', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP'], description:'Email marketing automation — flows, campaigns, profiles.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Meta Ads MCP',         group:'MCPs & TOOLS', note:'WIC · SIPP', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['WIC','SIPP'], description:'Paid social advertising — ad sets, creatives, reporting.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Linear MCP',           group:'MCPs & TOOLS', note:'All dev businesses', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Task and sprint management — issues, cycles, projects.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Craft MCP',            group:'MCPs & TOOLS', note:'All agents', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Primary knowledge store — documents, folders, search.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Shopify MCP',          group:'MCPs & TOOLS', note:'WIC store', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['WIC'], description:'E-commerce platform for Who Is Coffee store — products, orders, inventory.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Figma MCP',            group:'MCPs & TOOLS', note:'Design assets', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'Design assets and specs — UI/visual work, component inspection.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Higgsfield',           group:'MCPs & TOOLS', note:'AI video generation', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['All'], description:'AI video generation — short-form content, reels, clips, ads.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'Substack',             group:'MCPs & TOOLS', note:'Personal Brand', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['Bennovative'], description:'Newsletter publishing for personal brand.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
+  { type:'tool', name:'YouTube',              group:'MCPs & TOOLS', note:'Personal Brand', source:'Built-in', status:'live', created:true, version:'1.0', lastRun:'—', totalRuns:'—', ventures:['Bennovative'], description:'Video publishing for personal brand.', triggers:[], apiStatus:'Green', voiceInjection:'None', effort:'—', notes:'' },
 ];
 
 const groupMeta = {
@@ -1581,6 +1708,18 @@ const groupMeta = {
   'MCPs & TOOLS':     { cls:'gb-tools',     label:'MCPs & Tools'     },
 };
 
+function sourceBadge(source) {
+  const map = {
+    'Native':      { bg:'#1e3a5f', color:'#4a9eff'  },
+    'OpenClaudia': { bg:'#1a3a1a', color:'#48bb78'  },
+    'Antigravity': { bg:'#2a1a3a', color:'#c084fc'  },
+    'HoC Suite':   { bg:'#3a2a0a', color:'#d4a847'  },
+    'Built-in':    { bg:'#1e2a3a', color:'#64748b'  },
+  };
+  const s = map[source] || map['Native'];
+  return `<span style="display:inline-block;padding:1.5px 6px;border-radius:3px;font-size:8px;font-weight:700;letter-spacing:0.5px;background:${s.bg};color:${s.color};border:1px solid ${s.color}33;white-space:nowrap;">${source || 'Native'}</span>`;
+}
+
 function renderSkillsTable() {
   const tbody = document.getElementById('skills-tbody');
   const groups = [...new Set(registryData.map(r => r.group))];
@@ -1589,7 +1728,7 @@ function renderSkillsTable() {
 
   groups.forEach(group => {
     const rows = registryData.filter(r => r.group === group);
-    html += `<tr class="section-divider"><td colspan="6">${group}</td></tr>`;
+    html += `<tr class="section-divider"><td colspan="7">${group}</td></tr>`;
 
     rows.forEach(row => {
       const gm = groupMeta[row.group] || { cls:'gb-tools', label: row.group };
@@ -1599,20 +1738,28 @@ function renderSkillsTable() {
         ? `<span class="td-name">${isSlash ? '<span class="skill-prefix">/</span>' + row.name.slice(1) : row.name}</span>`
         : `<span class="td-name">${row.name}</span>${row.note ? `<span style="font-size:9px;color:#334155;margin-left:6px;">${row.note}</span>` : ''}`;
 
-      let statusHtml;
-      if (row.type === 'tool') {
-        statusHtml = `<span class="status-badge sb-active">Active</span>`;
-      } else if (row.created) {
-        statusHtml = `<span class="status-badge sb-built">● Built</span>`;
-        builtCount++;
-      } else {
-        statusHtml = `<span class="status-badge sb-notbuilt">Not Built</span>`;
-      }
+      const statusMap = {
+        'live':     { cls:'sb-built',    dot:'●', label:'Live'     },
+        'building': { cls:'sb-active',   dot:'◐', label:'Building' },
+        'planned':  { cls:'sb-notbuilt', dot:'○', label:'Planned'  },
+        'deferred': { cls:'sb-notbuilt', dot:'◌', label:'Deferred' },
+      };
+      const sm = statusMap[row.status || (row.created ? 'live' : 'planned')] || statusMap['planned'];
+      const statusHtml = row.type === 'tool'
+        ? `<span class="status-badge sb-active">Active</span>`
+        : `<span class="status-badge ${sm.cls}">${sm.dot} ${sm.label}</span>`;
 
-      html += `<tr>
+      if (row.type === 'skill' && sm.cls === 'sb-built') builtCount++;
+
+      const trClick = row.type === 'skill'
+        ? `style="cursor:pointer;" onclick="openDrawer('${row.name.replace(/^\//, '').replace(/'/g, "\\'")}')"`
+        : '';
+
+      html += `<tr ${trClick}>
         <td><span class="type-tag">${row.type}</span></td>
         <td>${nameHtml}</td>
         <td><span class="group-badge ${gm.cls}">${gm.label}</span></td>
+        <td>${sourceBadge(row.source || 'Native')}</td>
         <td>${statusHtml}</td>
         <td class="td-dim">${row.lastRun}</td>
         <td class="td-dim">${row.totalRuns}</td>
@@ -1625,8 +1772,90 @@ function renderSkillsTable() {
 
   tbody.innerHTML = html;
   document.getElementById('table-count').textContent =
-    `${totalSkills} skills · ${totalTools} tools · ${builtCount} built`;
+    `${totalSkills} skills · ${totalTools} tools · ${builtCount} live`;
 }
+
+// ── Skill Drawer ─────────────────────────────────────────────────────────────
+function openDrawer(skillName) {
+  const entry = registryData.find(r => r.name === skillName || r.name === '/' + skillName);
+  if (!entry) return;
+
+  const apiColor = { 'Green':'db-green', 'Yellow':'db-yellow', 'Red':'db-red' }[entry.apiStatus] || 'db-gray';
+  const statusColor = { 'live':'db-green', 'building':'db-yellow', 'planned':'db-blue', 'deferred':'db-gray' }[entry.status || 'planned'];
+  const sourceColor = { 'Native':'db-blue', 'OpenClaudia':'db-green', 'Antigravity':'db-purple', 'HoC Suite':'db-amber', 'Built-in':'db-gray' }[entry.source || 'Native'];
+
+  const ventures = (entry.ventures || ['—']).map(v => `<span class="drawer-venture">${v}</span>`).join('');
+  const triggers = (entry.triggers || []).map(t => `<span class="drawer-trigger">${t}</span>`).join('');
+
+  document.getElementById('drawer-title').textContent = entry.name;
+  document.getElementById('drawer-body').innerHTML = `
+    <div class="drawer-badges">
+      <span class="db-badge ${statusColor}">${entry.status || 'planned'}</span>
+      <span class="db-badge ${sourceColor}">${entry.source || 'Native'}</span>
+      <span class="db-badge ${apiColor}">API: ${entry.apiStatus || '—'}</span>
+      <span class="db-badge db-gray">Voice: ${entry.voiceInjection || '—'}</span>
+      ${entry.effort ? `<span class="db-badge db-amber">Effort: ${entry.effort}</span>` : ''}
+    </div>
+
+    ${entry.description ? `
+    <div class="drawer-section">
+      <div class="drawer-section-label">Description</div>
+      <div class="drawer-desc">${entry.description}</div>
+    </div>` : ''}
+
+    ${entry.ventures && entry.ventures.length ? `
+    <div class="drawer-section">
+      <div class="drawer-section-label">Venture Scope</div>
+      <div class="drawer-ventures">${ventures}</div>
+    </div>` : ''}
+
+    ${entry.triggers && entry.triggers.length ? `
+    <div class="drawer-section">
+      <div class="drawer-section-label">Trigger Phrases</div>
+      <div class="drawer-triggers">${triggers}</div>
+    </div>` : ''}
+
+    <div class="drawer-section">
+      <div class="drawer-section-label">Status</div>
+      <div class="drawer-meta-grid">
+        <div class="drawer-meta-item">
+          <div class="drawer-meta-key">Version</div>
+          <div class="drawer-meta-val">${entry.version || '—'}</div>
+        </div>
+        <div class="drawer-meta-item">
+          <div class="drawer-meta-key">Last Run</div>
+          <div class="drawer-meta-val">${entry.lastRun || '—'}</div>
+        </div>
+        <div class="drawer-meta-item">
+          <div class="drawer-meta-key">Total Runs</div>
+          <div class="drawer-meta-val">${entry.totalRuns || '—'}</div>
+        </div>
+        <div class="drawer-meta-item">
+          <div class="drawer-meta-key">Group</div>
+          <div class="drawer-meta-val">${entry.group || '—'}</div>
+        </div>
+      </div>
+    </div>
+
+    ${entry.notes ? `
+    <div class="drawer-section">
+      <div class="drawer-section-label">COO Notes</div>
+      <div class="drawer-notes">${entry.notes}</div>
+    </div>` : ''}
+  `;
+
+  document.getElementById('drawer-backdrop').classList.add('open');
+  document.getElementById('skill-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-backdrop').classList.remove('open');
+  document.getElementById('skill-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 </script>
 
 </body>

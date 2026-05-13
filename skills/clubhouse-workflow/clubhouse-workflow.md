@@ -1,56 +1,5 @@
 # The Clubhouse — Development Workflow Manager
 
-**Skill:** `clubhouse-workflow`
-**Status:** Live
-**Last Updated:** 2026-05-08
-
----
-
-## Purpose
-
-Development workflow manager for The Clubhouse fantasy golf app (BEN- issues in Linear). When Ben signals a task is done, this skill marks the current Linear issue Done, generates the exact git commit command, finds and queues the next highest-priority issue, moves it to In Progress, and produces a ready-to-paste Claude Code prompt for the next feature — all in one autonomous sequence.
-
-## Triggers
-
-- "done", "it's done", "finished", "that worked"
-- "next", "what's next", "move on", "next issue"
-- Any signal that a BEN issue is complete during app development sessions
-
-Always proactive — fire the moment a BEN issue completion is confirmed without waiting for the user to ask.
-
-## Scope
-
-**Handles:** identifying the just-completed BEN issue, marking it Done in Linear, emitting the commit command, picking the next priority backlog issue, moving it to In Progress, and assembling a complete Claude Code prompt with stack context and the issue's checklist embedded.
-
-**Does NOT:**
-- Wait for explicit step-by-step requests — runs the whole sequence autonomously
-- Skip the git commit command
-- Pick an issue out of priority order (Urgent → High → Medium → Low, then phase order)
-
-## Inputs
-
-- The most recently active BEN issue number (from conversation context — ask only if ambiguous)
-- Linear project state for The Clubhouse (project ID `810103d9-9f7b-43b6-96e1-a2bfaa783b09`, team Bennovative `1866be73-62be-43df-bda2-4fca1af7936d`)
-- Issue checklist text from the next Backlog issue's description
-
-## Outputs
-
-1. ✅ Confirmation that the Linear issue is marked Done
-2. The git commit command in a code block (`feat: [description] ([issue-id])`)
-3. The next issue title and ID with a Linear link
-4. A ready-to-paste Claude Code prompt embedding stack, "already built" context, and the next issue's checklist
-
-## Integration
-
-**Reads from:** Linear (`list_issues` for The Clubhouse Backlog ordered by priority)
-**Writes to:** Linear (`save_issue` to mark Done and to move next issue to In Progress)
-**Called by:** Ben directly during Clubhouse development sessions
-**MCPs required:** Linear MCP
-
-## Full Instructions
-
-# The Clubhouse — Development Workflow Manager
-
 ## Purpose
 
 When the user signals a task is done (says "done", "it's done", "finished", "that worked",

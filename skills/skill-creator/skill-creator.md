@@ -1,59 +1,3 @@
-# Skill Creator
-
-**Skill:** `skill-creator`
-**Status:** Live
-**Last Updated:** 2026-05-08
-
----
-
-## Purpose
-
-Creates new skills, modifies and improves existing skills, and measures skill performance. The core loop: decide what the skill should do → write a draft → run it on test prompts → evaluate qualitatively (with the user) and quantitatively (via assertions and benchmarks) → rewrite based on feedback → repeat. Also optimizes skill descriptions for better triggering accuracy.
-
-## Triggers
-
-- "Create a skill from scratch"
-- "Edit / improve / optimize this skill"
-- "Run evals to test a skill"
-- "Benchmark skill performance with variance analysis"
-- "Optimize a skill's description for triggering"
-- COO handoff after a Skill Brief is approved (with Optimized Build Prompt attached)
-
-## Scope
-
-**Handles:** intent capture, drafting SKILL.md (including pushy descriptions to combat undertriggering), test-case design, parallel with-skill/baseline runs, assertion grading, benchmark aggregation, eval-viewer review, iteration, description optimization via `run_loop.py`, blind comparison (advanced), and packaging via `package_skill.py`. Adapts to platform: Claude.ai (no subagents → serial runs, no benchmarking), Cowork (no display → static HTML, feedback.json download), Claude Code (full pipeline).
-
-**Does NOT (Principles to honor):**
-- Build malware, exploit code, or surprise/misleading skills (Principle of Lack of Surprise)
-- Use heavy-handed MUSTs when a why-explanation would do
-- Overfit to test cases — generalize from feedback so skills work across millions of invocations
-- Use `/skill-test` or any other testing skill — the running and evaluating section is one continuous sequence
-
-## Inputs
-
-- The user's intent (or a COO Skill Brief + Optimized Build Prompt)
-- Available MCPs and reference files
-- Test prompts the user signs off on (saved to `evals/evals.json`)
-- Eval queries for description optimization (20-item mix of should-trigger and should-not-trigger near-misses)
-- Reference files: `agents/grader.md`, `agents/comparator.md`, `agents/analyzer.md`, `references/schemas.md`, `assets/eval_review.html`
-
-## Outputs
-
-- A complete SKILL.md (frontmatter + body) plus optional bundled resources (`scripts/`, `references/`, `assets/`)
-- Iteration workspace at `<skill-name>-workspace/iteration-N/eval-<ID>/...` containing outputs, `eval_metadata.json`, `grading.json`, `timing.json`
-- `benchmark.json` and `benchmark.md` with pass rate, time, and tokens (mean ± stddev) per configuration
-- Eval-viewer HTML (Outputs + Benchmark tabs) generated via `eval-viewer/generate_review.py`
-- An optimized `best_description` written back to SKILL.md frontmatter
-- Optionally: a packaged `.skill` file via `package_skill.py`
-
-## Integration
-
-**Reads from:** the conversation history (intent capture from prior workflow), MCPs (research), `agents/*.md`, `references/schemas.md`, `assets/eval_review.html`, prior iterations under `<skill-name>-workspace/`
-**Writes to:** the new or edited skill folder (SKILL.md + bundled files), `<skill-name>-workspace/iteration-N/...`, the user's filesystem (and Downloads when the eval-viewer "Submit All Reviews" returns `feedback.json`)
-**Called by:** Ben directly, COO (after Skill Brief approval), self-loop during description optimization
-**MCPs required:** none required for the loop itself; subagents required for parallel runs (Claude Code / Cowork) and unavailable on Claude.ai
-
-## Full Instructions
 
 # Skill Creator
 
@@ -111,7 +55,7 @@ Proactively ask questions about edge cases, input/output formats, example files,
 
 Check available MCPs - if useful for research (searching docs, finding similar skills, looking up best practices), research in parallel via subagents if available, otherwise inline. Come prepared with context to reduce burden on the user.
 
-### Write the SKILL.md
+### Write [skill-name].md and SKILL.md
 
 Based on the user interview, fill in these components:
 
@@ -126,14 +70,20 @@ Based on the user interview, fill in these components:
 
 ```
 skill-name/
-├── SKILL.md (required)
-│   ├── YAML frontmatter (name, description required)
-│   └── Markdown instructions
+├── SKILL.md (Claude entry point — YAML frontmatter + one-line reference only)
+├── [skill-name].md (full skill spec — all instructions and logic live here)
 └── Bundled Resources (optional)
     ├── scripts/    - Executable code for deterministic/repetitive tasks
     ├── references/ - Docs loaded into context as needed
     └── assets/     - Files used in output (templates, icons, fonts)
 ```
+
+> **BenOS Two-File Protocol (required):**
+> Every BenOS skill MUST be created as two files:
+> - **`[skill-name].md`** — Contains the full skill specification: all instructions, all logic, all output formats, all reference guidance. This is the human-readable and agent-readable source of truth.
+> - **`SKILL.md`** — Contains ONLY the YAML frontmatter block (`name` + `description` fields) plus one line: `"For full instructions, read [skill-name].md in this directory."` This is the Claude-facing entry point — it must stay light so the triggering description loads fast. SKILL.md MUST NOT contain the full skill body.
+>
+> Both files must be created before a skill is considered complete.
 
 #### Progressive Disclosure
 
@@ -458,6 +408,9 @@ Take `best_description` from the JSON output and update the skill's SKILL.md fro
 ---
 
 ### Package and Present (only if `present_files` tool is available)
+
+> **Pre-completion validation (BenOS Two-File Protocol):**
+> Before marking a skill complete: confirm `[skill-name].md` exists with full content AND `SKILL.md` exists with only frontmatter + one-line reference. A skill with only `SKILL.md` containing the full skill body is **NON-COMPLIANT** with BenOS protocol and must be split before packaging.
 
 Check whether you have access to the `present_files` tool. If you don't, skip this step. If you do, package the skill and present the .skill file to the user:
 

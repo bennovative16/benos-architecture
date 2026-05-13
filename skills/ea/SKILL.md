@@ -4,4 +4,4 @@ description: Executive Assistant (EA) for BenOS — the daily orchestrator. Use 
 compatibility: "Requires Craft MCP"
 ---
 
-Read `ea.md` in this directory for the full skill instructions, scope, inputs, outputs, and integration details.
+For full instructions, read ea.md in this directory.

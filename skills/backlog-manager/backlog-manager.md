@@ -1,66 +1,5 @@
 # Backlog Manager
 
-**Skill:** `backlog-manager`
-**Status:** Live
-**Last Updated:** 2026-05-08
-
----
-
-## Purpose
-
-The sequencer for BenOS. Work comes in from Inbox, Strategy Builder, the Idea Bank, or Ben directly. Everything gets scored against venture priority, revenue impact, and urgency, then comes out as an ordered list. Task Manager takes it from there. The goal is not the perfect backlog — it's making sure the next thing Ben or a BA works on is the right thing.
-
-## Triggers
-
-- "Backlog Manager —"
-- "prioritize the backlog"
-- "what should we work on next"
-- "sequence these items"
-- "order this work"
-- "what is the priority"
-- Inbox or Strategy Builder produces a work list that needs sequencing
-- EA Monday planning loading the week in priority order
-
-## Scope
-
-**Handles:** scoring work items via urgency × venture multiplier ± revenue/effort adjustments, surfacing aging Idea Bank items, producing an ordered list capped at 10 with explicit routing destinations, and a confirm/reorder gate before passing to Task Manager.
-
-**Does NOT:**
-- Create tasks in Craft or Linear (Task Manager owns that)
-- Auto-activate Idea Bank items — surface and ask
-- Build execution plans (Strategy Builder owns that)
-- Deprioritize revenue-generating work without flagging the trade-off
-- Present more than 10 items in a single output
-- Reorder items after passing to Task Manager
-
-## Inputs
-
-- Work briefs from Inbox or Strategy Builder
-- "Load the week" requests from EA Monday planning
-- A direct list from Ben, or the open question "what should we work on?"
-- Idea Bank Fresh items with priority ≥ 4 captured > 7 days ago
-- BEN.md for venture priority order and revenue context
-- Current-quarter objectives from BenOS / 02 — Goals & KPIs
-
-## Outputs
-
-- Numbered priority-ordered backlog (max 10 items) printed inline with venture, urgency, effort, score, and routing destination
-- Idea Bank activation prompts as a separate section below the main list
-- Confirm/reorder gate prompt
-- After Ben confirms: rows written to the Craft Project Pipeline collection (block ID `ed66aa75-337a-1eb4-13d2-0e16b1cdd59f`) via `collectionItems_add`, all with Status = "Backlog"
-- Ordered list passed to Task Manager
-
-## Integration
-
-**Reads from:** Inbox/Strategy Builder briefs, BEN.md, BenOS / 02 — Goals & KPIs / current-quarter-objectives, BenOS / 04 — Idea Inbox / Idea Bank
-**Writes to:** chat output, Craft Project Pipeline collection (`collectionItems_add`)
-**Called by:** EA (Monday planning), Ben directly, Inbox, Strategy Builder
-**MCPs required:** Craft MCP
-
-## Full Instructions
-
-# Backlog Manager
-
 This skill is the sequencer. Work comes in from Inbox, Strategy Builder, or Ben directly. The Idea Bank gets checked for items that are aging out. Everything gets scored. An ordered list comes out. Task Manager takes it from there.
 
 The goal is not to create the perfect backlog — it's to make sure the next thing Ben or a BA works on is the right thing, given venture priorities, revenue impact, and urgency.
@@ -147,22 +86,6 @@ Cap at 10 items per output. If more exist, note the count held for next session.
 
 The "confirm or reorder?" prompt at the bottom is important — it gives Ben one chance to adjust before Task Manager starts creating tasks. If Ben doesn't respond or says "go ahead," pass immediately to Task Manager.
 
-### Write to Craft Project Pipeline
-After outputting the prioritized backlog list to chat and receiving Ben's confirmation, write each confirmed item to the Craft Project Pipeline collection using collectionItems_add.
-Collection block ID: ed66aa75-337a-1eb4-13d2-0e16b1cdd59f
-For each item, write:
-- Title: item title
-- Venture: venture tag
-- Urgency: urgency level
-- Effort: effort estimate
-- Priority Score: the calculated score (number)
-- Status: "Backlog" (always on creation)
-- Blocking: true/false
-- Routing: the routing destination (→ Task Manager, → Strategy Builder, etc.)
-- Done When: if available from the source brief; otherwise omit
-
-Write items in priority order. Do not write items held for next session.
-
 ---
 
 ## EA Monday Planning Mode
@@ -187,7 +110,6 @@ Reads from:
 
 Writes to:
 - Chat only (the prioritized backlog)
-- Craft Project Pipeline collection (collectionItems_add) — Status set to "Backlog" on creation
 - Passes ordered list to Task Manager
 
 Called by: EA (Monday planning), Ben directly, Inbox, Strategy Builder

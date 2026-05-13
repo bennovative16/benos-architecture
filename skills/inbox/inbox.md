@@ -1,67 +1,5 @@
 # Inbox
 
-**Skill:** `inbox`
-**Status:** Live
-**Last Updated:** 2026-05-08
-
----
-
-## Purpose
-
-Work intake skill for BenOS. Catches concrete work items from chat — client requests, tasks, deliverables, feedback to act on, scoping requests — and structures them into work briefs ready for execution. Ben never has to think about how to format a work item. The skill auto-infers venture context from the calling BA or surrounding conversation rather than asking Ben to repeat himself.
-
-The distinction that matters: Capture is for IDEAS. Inbox is for WORK. If it's something to act on, Inbox handles it. If it's a thought with no immediate action behind it, redirect to Capture.
-
-## Triggers
-
-- "Inbox —"
-- "intake this"
-- "add this to the backlog"
-- "log this work"
-- "scope this out"
-- Any message describing concrete work that needs to happen ("we need to do X")
-
-Fire immediately without preamble.
-
-## Scope
-
-**Handles:** establishing venture context (called BA, message inference, or one targeted question), classifying Work Type / Urgency / Effort / Blocking, writing the WORK BRIEF inline with What/Why/Done When/Dependencies/Next Step plus venture and type hashtags, declaring routing destination, and writing the item to the Craft Inbox collection.
-
-**Does NOT:**
-- Write to the Idea Bank (that's Capture)
-- Create tasks in Linear or Craft (that's Task Manager)
-- Prioritize work (that's Backlog Manager)
-- Build execution plans (that's Strategy Builder)
-- Ask more than one clarifying question per item
-- Produce options or alternatives
-- Proceed if venture context cannot be determined
-
-## Inputs
-
-- The work statement from Ben or a BA (one line, paragraph, or rich context)
-- Calling BA's venture (auto-applied — never re-ask if known)
-- Inferred venture from message content (SIPP, Who Is Coffee, Catalyzing Concepts, etc.)
-- BEN.md if a venture lookup is needed
-
-## Outputs
-
-- One WORK BRIEF in chat with all required fields including hashtag block
-- Routing declaration at the bottom (`Routing → [destination]`)
-- Row in Craft Inbox collection (block ID `af90abfb-9651-364e-6542-083035518993`) via `collectionItems_add`, Status = "New"
-- Either: stop (standalone invocation) or pass the brief directly to the routed destination (chained invocation)
-
-## Integration
-
-**Reads from:** calling BA / conversation for venture; BEN.md for venture context lookup if required
-**Writes to:** chat (the brief), Craft Inbox collection
-**Called by:** Ben directly, any BA when work surfaces in their domain
-**Frequency:** On-demand, multiple times daily
-**MCPs required:** Craft MCP (only if BA context lookup is needed; the brief itself is chat-output)
-
-## Full Instructions
-
-# Inbox
-
 When work lands in chat, this skill catches it, structures it, and hands it off ready for execution. Ben shouldn't have to think about how to format a work item — that's the skill's job.
 
 **The distinction that matters:**
@@ -157,23 +95,6 @@ State it at the bottom of the brief: `Routing → [destination]`
 - **Standalone invocation**: output the brief and stop. Ben or a BA handles the next step.
 - **Chained invocation** (called by a BA or another skill): pass the brief directly to the routed destination.
 
-### Step 5 — Write to Craft Inbox collection
-After outputting the work brief to chat, write the item to the Craft Inbox collection using collectionItems_add.
-Collection block ID: af90abfb-9651-364e-6542-083035518993
-Write these fields:
-- Title: the work item title from the brief
-- Venture: from brief
-- Type: work type from brief
-- Urgency: urgency from brief
-- Effort: effort estimate from brief
-- Status: "New" (always on creation)
-- Blocking: from brief (true/false)
-- Routing: the routing destination from the brief
-- Done When: from brief
-- Next Step: from brief
-
-Do not ask Ben for any of these values — they are all present in the work brief already written in Step 3.
-
 ---
 
 ## Output
@@ -192,7 +113,6 @@ Reads from:
 
 Writes to:
 - Chat only (the brief)
-- Craft Inbox collection (collectionItems_add) — Status set to "New" on creation
 - Downstream: Backlog Manager, Strategy Builder, or Onboarding will write to Craft/Linear
 
 Called by: Ben directly, or any BA when work surfaces in their domain

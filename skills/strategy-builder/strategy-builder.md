@@ -11,8 +11,8 @@ The output is a plan, not a task list. Plans have shape — they show what depen
 ### Step 1 — Load context
 
 Before planning anything, read:
-- BEN.md — venture priority order, revenue target, active vs. parked ventures
-- Q objectives (BenOS / 02 — Goals & KPIs / current-quarter-objectives)
+- BEN.md: `SELECT content FROM knowledge_base WHERE slug = 'ben'` via Supabase MCP (project_id: tedpbnotgirjatlqkjxw)
+- Q objectives: not yet in Supabase — note gap and derive from venture priority defaults in BEN.md
 
 These affect sequencing. Catalyzing Concepts relaunch is the current fastest revenue path. Plans that serve revenue-generating objectives get priority positioning in the output.
 
@@ -21,11 +21,11 @@ These affect sequencing. Catalyzing Concepts relaunch is the current fastest rev
 Restate Ben's goal as a one-sentence measurable objective:
 "By [timeframe], [specific outcome that can be verified]."
 
-If the goal cannot be restated this way, ask one question to sharpen it. Example:
+If the goal cannot be restated this way, ask one question to sharpen it — **unless called in chained mode** (brief contains `[CHAINED]`), in which case infer the sharpened objective from the brief's What, Why, and Done When fields without asking.
+
+Example:
 - Vague: "grow Who Is Coffee"
 - Sharp: "By end of Q2, grow Who Is Coffee DTC monthly revenue from $3k to $5k through Meta ad scaling and one new wholesale account"
-
-Do not plan against a vague goal. A plan is only as good as the target it's aimed at.
 
 ### Step 3 — Break into projects
 
@@ -47,7 +47,7 @@ Runs parallel to: [other project(s) that can run simultaneously, or "None"]
 Campaign trigger: [Yes — triggers Campaign Designer / No]
 ```
 
-### Step 4 — Build the handoff block
+### Step 4 — Build the handoff block and cascade
 
 At the bottom of the plan, produce a structured handoff for Backlog Manager:
 
@@ -69,7 +69,9 @@ First action this week: [The single most important thing to start]
 ──────────────────────────────────────
 ```
 
-The handoff block is what Backlog Manager reads. Make it unambiguous — no judgment calls required downstream.
+**Chained mode:** When the input brief contains `[CHAINED — skip confirmation checkpoints]`, immediately read backlog-manager.md and pass this handoff block to Backlog Manager after producing it. Do not wait for Ben to confirm or review the plan. The cascade continues uninterrupted: Strategy Builder → Backlog Manager → Task Manager.
+
+**Standalone mode:** Output the plan and handoff block. Pause. Ben reviews and says "go ahead" before Backlog Manager runs.
 
 ---
 
@@ -105,17 +107,18 @@ Length scales with complexity. A 2-project plan should be shorter than a 5-proje
 ## BenOS Integration
 
 Reads from:
-- BEN.md (always)
-- BenOS / 02 — Goals & KPIs / current-quarter-objectives (always)
+- BEN.md (always): `SELECT content FROM knowledge_base WHERE slug = 'ben'` via Supabase MCP
+- Q objectives: not yet in Supabase — note gap, use venture priority defaults
 - Venture-specific context from calling BA (if applicable)
+- Incoming work brief from Inbox (chained mode)
 
 Writes to:
 - Chat only (the plan and handoff block)
-- Does NOT write to Craft or Linear
+- Does NOT write to Linear directly
 
 Called by: Ben directly | Inbox (when type = Strategic or Campaign)
 Frequency: Weekly or on-demand
-MCPs required: Craft MCP (for context reads)
+MCPs required: Supabase MCP (for context reads)
 
 ---
 
@@ -125,8 +128,9 @@ MCPs required: Craft MCP (for context reads)
 - Prioritize the backlog (that's Backlog Manager)
 - Design campaigns (that's Campaign Designer)
 - Plan for parked ventures (Bidsters, Clubhouse) unless Ben explicitly signals reactivation
-- Ask more than one clarifying question before producing a plan
+- Ask more than one clarifying question before producing a plan (zero in chained mode)
 - Produce vague plans — every project must have a concrete scope and done-when
+- Wait for confirmation before cascading when in chained mode
 
 ---
 
@@ -134,4 +138,15 @@ MCPs required: Craft MCP (for context reads)
 
 Plans adopted without major restructuring ≥75% of invocations.
 Campaign Designer trigger accuracy: 100% (if work requires marketing execution, it gets flagged).
+Chained cascade rate: 100% (no confirmation pauses in chained mode).
 30-day evaluation date: 2026-06-07
+
+---
+
+## HANDOFF
+
+**Receives from:** EA (when brief type = Strategic or Campaign) | Ben directly | BA skills (strategic planning tasks)
+**Input:** goal or destination + venture context + Q objectives (from BEN.md or caller brief)
+**Produces:** structured plan (projects + dependencies + sequencing) + handoff block for Backlog Manager
+**Passes to:** Backlog Manager (to sequence projects into backlog) → Task Manager (to create tasks)
+**Completion log:** Output delivered in chat. No database write — plan lives in the conversation until cascaded.

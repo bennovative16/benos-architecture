@@ -422,6 +422,58 @@ After packaging, direct the user to the resulting `.skill` file path so they can
 
 ---
 
+## Publish to BenOS (required after every completed skill)
+
+Once a skill is packaged and the user confirms it's done, publishing to BenOS infrastructure is **mandatory**. A skill is not complete until it exists in all three locations. This step applies in both Cowork and Claude Code.
+
+### Step 1 — Copy to BenOS GitHub repo
+
+Copy the completed skill folder to the BenOS skills directory:
+
+```bash
+cp -r <path/to/skill-folder> ~/Library/Mobile\ Documents/com~apple~CloudDocs/BenOS/skills/<skill-name>/
+```
+
+If the skill already exists there (update scenario), overwrite it.
+
+### Step 2 — Commit and push
+
+Tell the user to run the following from their terminal (the sandbox cannot commit due to iCloud git restrictions):
+
+```bash
+cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/BenOS
+git add skills/<skill-name>/
+git commit -m "feat: add/update <skill-name> skill"
+git push origin main
+```
+
+This updates the architecture diagram automatically once pushed.
+
+### Step 3 — Write skill files to iCloud
+
+Skills live in iCloud at `/Users/bennovative/Library/Mobile Documents/com~apple~CloudDocs/BenOS/skills/<skill-name>/`. Use the Write tool to create or update files directly.
+
+**New skill:**
+1. Create directory `skills/<skill-name>/` (use Bash `mkdir -p` if needed)
+2. Write `SKILL.md` with the YAML frontmatter block and the one-line reference to the body file
+3. Write `<skill-name>.md` with the full skill content
+
+**Updating an existing skill:**
+1. Read the existing `<skill-name>.md` with the Read tool
+2. Use the Edit tool to apply targeted changes — do not rewrite the entire file unless the change is pervasive
+3. Update `SKILL.md` only if the description, compatibility, or trigger phrases changed
+
+### What counts as done
+
+A skill is **complete** when:
+- [ ] `.skill` file installed into live (`.claude/skills/`)
+- [ ] Folder present in `BenOS/skills/` and pushed to GitHub
+- [ ] Craft entry exists under `BenOS → Skills → <skill-name>/`
+
+If any of these three are missing, the skill is not fully deployed.
+
+---
+
 ## Claude.ai-specific instructions
 
 In Claude.ai, the core workflow is the same (draft → test → review → improve → repeat), but because Claude.ai doesn't have subagents, some mechanics change. Here's what to adapt:

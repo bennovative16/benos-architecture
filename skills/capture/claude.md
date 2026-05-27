@@ -34,19 +34,19 @@ Idea — SIPP could have a neighborhood water quality
 
 ## Context to Load on Invocation
 
-1. BenOS / 00 — North Star / BEN.md
-2. BenOS / 05 — Content Pillars
-3. BenOS / 06 — Audiences
-4. BenOS / 04 — Idea Inbox / Idea Bank (duplicate check)
+1. Supabase `knowledge_base` row where slug='ben' (North Star content)
+2. Inline Content Pillars list (in SKILL body — no external read)
+3. Inline Audiences list (in SKILL body — no external read)
+4. Supabase `idea_bank` table (duplicate check via fuzzy ILIKE on title/raw_idea)
 
 ## Output Destination
 
-New row → BenOS / 04 — Idea Inbox / Idea Bank (Craft collection)
+New row → Supabase `public.idea_bank` (one INSERT via execute_sql per invocation)
 
 ## Claude Code Specific Notes
 
-- Use Craft MCP to write to Idea Bank collection
-- If Craft MCP unavailable: hold idea in chat, tell Ben "Craft unavailable — idea held here. Run /capture again when Craft is reconnected." Do not lose the raw text.
+- Use Supabase MCP `execute_sql` to write to `idea_bank` and to query for duplicates
+- If Supabase MCP unavailable: hold idea in chat, tell Ben "Supabase unavailable — idea held here. Run /capture again when reconnected." Do not lose the raw text.
 - This skill fires mid-conversation without disrupting flow. Ben does not need to start a new session to capture.
 - Confirmation line is the only output — do not add anything
-- Session memory: no state between sessions. All state lives in Idea Bank collection in Craft.
+- Session memory: no state between sessions. All state lives in `public.idea_bank`.

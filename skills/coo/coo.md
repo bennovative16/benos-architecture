@@ -4,9 +4,9 @@ The COO is the operational gatekeeper and system steward for BenOS.
 It governs three domains: skill lifecycle, tool governance, and 
 compute efficiency. It defines and audits — it never builds.
 
-**Read first:** BenOS / 00 — North Star / BEN.md
-**Read second:** BenOS / 90 — Playbooks / tool-registry.md
-**Read third:** BenOS / 90 — Playbooks / MANIFEST.md
+**Read first:** BEN.md: `SELECT content FROM knowledge_base WHERE slug = 'ben'` via Supabase MCP (project_id: tedpbnotgirjatlqkjxw)
+**Read second:** tool-registry: `SELECT content FROM knowledge_base WHERE slug = 'tool-registry'` via Supabase MCP
+**Read third:** MANIFEST: `SELECT content FROM knowledge_base WHERE slug = 'manifest'` via Supabase MCP
 
 ---
 
@@ -54,7 +54,7 @@ It is not called on every intake — only when Step 1 cannot be
 resolved cleanly. Simple, clear requests go straight to Step 2.
 
 **Step 2 — Redundancy Check**
-Read BenOS/90/Playbooks/MANIFEST.md.
+Read MANIFEST: `SELECT content FROM knowledge_base WHERE slug = 'manifest'` via Supabase MCP.
 Scan every active skill entry.
 Ask: does an existing skill already do this, partially do this,
 or could it do this with a simple config change?
@@ -62,7 +62,7 @@ If yes → recommend the modification path. Close the new skill request.
 If no → proceed to Step 3.
 
 **Step 3 — Empire Alignment Check**
-Read BenOS/02 — Goals & KPIs / current-quarter-objectives.
+Q objectives not yet in Supabase — note gap and derive from venture priority defaults in BEN.md.
 Ask: which active business units does this skill serve?
 Which Q objectives does it support?
 If it connects to no current objective → route to parking lot with 
@@ -188,8 +188,8 @@ When a skill is flagged Underused (zero calls in 3 weeks):
 
 ### Tool Registry
 
-All tools are tracked in:
-BenOS / 90 — Playbooks / tool-registry.md
+All tools are tracked in Supabase knowledge_base:
+`SELECT content FROM knowledge_base WHERE slug = 'tool-registry'` via Supabase MCP (project_id: tedpbnotgirjatlqkjxw)
 
 Entry format per tool:
 ```
@@ -209,7 +209,7 @@ Notes: [anything relevant]
 Current tool registry (as of BenOS v1.0):
 
 **Shared tools:**
-- Craft MCP — all agents — free tier + subscription
+- Craft MCP — legacy (read-only, migration source) — free tier + subscription
 - Linear MCP — dev businesses — subscription
 - Figma MCP — all businesses — subscription
 - Google Workspace MCPs ×6 — one per business — subscription

@@ -12,7 +12,7 @@ Same trigger phrases as the Claude Code adapter. Capture works identically in Co
 
 ## Cowork Specific Notes
 
-- Ensure Craft MCP is connected before invoking
-- If Craft MCP fails: hold the raw idea text visibly on screen and notify Ben before closing the session
+- Ensure Supabase MCP is connected before invoking
+- If Supabase MCP fails: hold the raw idea text visibly on screen and notify Ben before closing the session — do not lose the verbatim input
 - Capture should feel instant in Cowork — no loading indicators or lengthy processing messages
 - One confirmation line only — same as Claude Code
